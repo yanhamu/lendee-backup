@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Lendee";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Lendee</h1>
+    <h2>Login</h2>
+    <partial name="/Views/Account/_Login.cshtml" />
+    <text>
+        Want to use it? Register <a asp-controller="Account" asp-action="Register">here</a>. It's <b>free</b>!
+    </text>
+
+    <p class="mt-5">
+        For demo login click <a id="myLink" href="/" onclick="demoLogIn">here</a>
+    </p>
+    <p>or</p>
+    <p>login using <code>bob/bob</code></p>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        function registerEvent() {
+            var link = document.getElementById("myLink");
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                var username = document.getElementById("username");
+                var password = document.getElementById("password");
+                var form = document.getElementById("loginForm");
+
+                username.value = "bob";
+                password.value = "bob";
+                form.submit();
+            });
+        }
+        window.onload = registerEvent();
+    </script>
+}
