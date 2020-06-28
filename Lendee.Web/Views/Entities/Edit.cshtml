@@ -1,0 +1,80 @@
+﻿@model Lendee.Web.Features.Entity.EntityViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Upravit</h1>
+
+<form method="post" asp-action="Edit">
+    <input id="id" asp-for="Id" type="hidden" />
+
+    <div class="form-group row">
+        <label asp-for="FirstName" class="col-sm-2 col-form-label">Jméno</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="FirstName" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="LastName" class="col-sm-2 col-form-label">Příjmení</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="LastName" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="CompanyName" class="col-sm-2 col-form-label">Název společnosti</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="CompanyName" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="IdentifyingNumber" class="col-sm-2 col-form-label">IČO</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="IdentifyingNumber" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="TaxIdentifyingNumber" class="col-sm-2 col-form-label">DIČ</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="TaxIdentifyingNumber" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Email" type="email" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="PhoneNumber" class="col-sm-2 col-form-label">Tel.číslo</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="PhoneNumber" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="BankAccountNumber" class="col-sm-2 col-form-label">Bankovní číslo účtu</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="BankAccountNumber" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Note" class="col-sm-2 col-form-label">Poznámka</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Note" type="text" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+            <button type="submit" class="btn btn-primary form-control">Save</button>
+        </div>
+    </div>
+</form>

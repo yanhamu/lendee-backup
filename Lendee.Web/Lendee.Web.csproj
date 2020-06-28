@@ -6,12 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lendee.Account.Domain\Lendee.Account.Domain.csproj" />
+    <ProjectReference Include="..\Lendee.Core.DataAccess\Lendee.Core.DataAccess.csproj" />
+    <ProjectReference Include="..\Lendee.Core.Domain\Lendee.Core.Domain.csproj" />
   </ItemGroup>
 
 

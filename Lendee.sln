@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lendee.Account.Domain", "Le
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lendee.Database.Migrator", "Lendee.Database.Migrator\Lendee.Database.Migrator.csproj", "{1D031884-BE7C-443C-A3C0-501BA7EF6A26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lendee.Core.Domain", "Lendee.Core.Domain\Lendee.Core.Domain.csproj", "{EECA4821-8304-48F3-BC09-2339602FA4FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lendee.Core.Domain", "Lendee.Core.Domain\Lendee.Core.Domain.csproj", "{EECA4821-8304-48F3-BC09-2339602FA4FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lendee.Core.DataAccess", "Lendee.Core.DataAccess\Lendee.Core.DataAccess.csproj", "{74221829-3027-49A4-A15F-D109697A950D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{EECA4821-8304-48F3-BC09-2339602FA4FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EECA4821-8304-48F3-BC09-2339602FA4FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EECA4821-8304-48F3-BC09-2339602FA4FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74221829-3027-49A4-A15F-D109697A950D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74221829-3027-49A4-A15F-D109697A950D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74221829-3027-49A4-A15F-D109697A950D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74221829-3027-49A4-A15F-D109697A950D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

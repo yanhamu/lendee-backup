@@ -1,3 +1,5 @@
+using Autofac;
+using Lendee.Web.Configurations;
 using Lendee.Web.Configurations.ServiceCollectionExtensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -27,6 +29,11 @@ namespace Lendee.Web
             services.AddControllersWithViews(x =>
             {
             });
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new LendeeModule());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

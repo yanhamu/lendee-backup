@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Lendee.Core.Domain.Model.LegalEntity>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<table class="table table-sm">
+    @foreach (var entity in Model)
+    {
+        <tr>
+            <td>@entity.Id</td>
+            <td>@entity.FirstName @entity.LastName</td>
+            <td>@entity.CompanyName</td>
+            <td>@entity.PhoneNumber</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@entity.Id">
+                    <i class="fa fa-edit fa-xs"></i>
+                </a>
+            </td>
+        </tr>
+    }
+</table>
