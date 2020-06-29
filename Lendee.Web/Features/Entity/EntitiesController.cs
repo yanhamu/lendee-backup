@@ -7,17 +7,17 @@ namespace Lendee.Web.Features.Entity
 {
     public class EntitiesController : Controller
     {
-        private readonly IEntityRepository entityRepository;
+        private readonly IEntityRepository repository;
 
         public EntitiesController(IEntityRepository entityRepository)
         {
-            this.entityRepository = entityRepository;
+            this.repository = entityRepository;
         }
 
         [HttpGet]
         public async Task<ActionResult> List()
         {
-            var entities = await entityRepository.List();
+            var entities = await repository.List();
             return View(entities);
         }
 
@@ -43,8 +43,8 @@ namespace Lendee.Web.Features.Entity
                 TaxIdentifyingNumber = model.TaxIdentifyingNumber
             };
 
-            var saved = entityRepository.Add(entity);
-            await entityRepository.Save();
+            var saved = repository.Add(entity);
+            await repository.Save();
 
             return RedirectToAction(nameof(List));
         }
@@ -52,7 +52,7 @@ namespace Lendee.Web.Features.Entity
         [HttpGet]
         public async Task<ActionResult> Edit(long id)
         {
-            var entity = await entityRepository.Find(id);
+            var entity = await repository.Find(id);
             var model = new EntityViewModel()
             {
                 Id = entity.Id,
@@ -73,7 +73,7 @@ namespace Lendee.Web.Features.Entity
         [HttpPost]
         public async Task<ActionResult> Edit(long id, EntityViewModel model)
         {
-            var entity = await entityRepository.Find(id);
+            var entity = await repository.Find(id);
 
             entity.Email = model.Email;
             entity.PhoneNumber = model.PhoneNumber;
@@ -85,16 +85,9 @@ namespace Lendee.Web.Features.Entity
             entity.IdentifyingNumber = model.IdentifyingNumber;
             entity.TaxIdentifyingNumber = model.TaxIdentifyingNumber;
 
-            await entityRepository.Save();
+            await repository.Save();
 
-            return RedirectToAction(nameof(Detail), new { id = id });
-        }
-
-        [HttpGet]
-        public ActionResult Detail(long id)
-        {
-            var entity = entityRepository.Find(id);
-            return View(entity);
+            return RedirectToAction(nameof(List));
         }
     }
 

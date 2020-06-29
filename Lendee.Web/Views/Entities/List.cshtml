@@ -17,9 +17,10 @@
             <td>@entity.PhoneNumber</td>
             <td>
                 <a asp-action="Edit" asp-route-id="@entity.Id">
-                    <i class="fa fa-edit fa-xs"></i>
+                    upravit
                 </a>
             </td>
         </tr>
     }
 </table>
+<a asp-action="Create" class="btn btn-primary">Nový záznam</a>
