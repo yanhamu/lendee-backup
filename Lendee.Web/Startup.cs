@@ -24,11 +24,12 @@ namespace Lendee.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
             services.AddHttpContextAccessor();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.RegisterUserDependencies(configuration);
-            services.AddControllersWithViews(x =>
-            {
-            });
+            services
+                .AddControllersWithViews()
+                .AddViewLocalization();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -55,6 +56,7 @@ namespace Lendee.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseRequestLocalization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

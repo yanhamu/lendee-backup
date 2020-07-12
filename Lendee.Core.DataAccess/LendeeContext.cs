@@ -23,6 +23,18 @@ namespace Lendee.Core.DataAccess
             legalEntity.Property(x => x.Note).HasColumnName("note");
             legalEntity.Property(x => x.IdentifyingNumber).HasColumnName("identifying_number");
             legalEntity.Property(x => x.TaxIdentifyingNumber).HasColumnName("tax_identifying_number");
+
+            var contract = modelBuilder.Entity<Contract>();
+            contract.ToTable("contracts");
+            contract.HasKey(x => x.Id);
+            contract.Property(x => x.Name).HasColumnName("name");
+            contract.Property(x => x.Type).HasColumnName("type");
+            contract.Property(x => x.Currency).HasColumnName("currency");
+            contract.Property(x => x.LenderId).HasColumnName("lender");
+            contract.Property(x => x.LendeeId).HasColumnName("lendee");
+            contract.Property(x => x.Note).HasColumnName("note");
+            contract.HasOne(x => x.Lendee).WithMany().HasForeignKey(x => x.LendeeId).IsRequired(false);
+            contract.HasOne(x => x.Lender).WithMany().HasForeignKey(x => x.LenderId).IsRequired(false);
         }
     }
 }

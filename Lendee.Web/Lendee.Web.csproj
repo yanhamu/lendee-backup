@@ -17,6 +17,12 @@
     <ProjectReference Include="..\Lendee.Core.Domain\Lendee.Core.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views\Dashboard\Index.cs.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 
 
 </Project>

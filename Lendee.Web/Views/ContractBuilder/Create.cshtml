@@ -1,0 +1,52 @@
+﻿@model Lendee.Web.Features.Contract.DraftContract
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@Localizer["Contract Builder"]</h1>
+
+<form method="post">
+    <div class="form-group row">
+        <label asp-for="Name" class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Name" type="text" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">@Localizer["Contract type"]</label>
+        <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
+            <label class="btn btn-secondary">
+                <input type="radio" autocomplete="off" asp-for="Type" value="@Lendee.Core.Domain.Model.ContractType.Rent"> @Localizer["Rent"]
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" autocomplete="off" asp-for="Type" value="@Lendee.Core.Domain.Model.ContractType.Credit"> @Localizer["Credit"]
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">@Localizer["Currency"]</label>
+        <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
+            <label class="btn btn-secondary">
+                <input type="radio" autocomplete="off" asp-for="Currency" value="@Lendee.Core.Domain.Model.Currency.CZK"> CZK
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" autocomplete="off" asp-for="Currency" value="@Lendee.Core.Domain.Model.Currency.EUR"> EUR
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" autocomplete="off" asp-for="Currency" value="@Lendee.Core.Domain.Model.Currency.USD"> USD
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="Note" class="col-sm-2 col-form-label">Note</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Note" type="text" />
+        </div>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="@Localizer["Next"]" />
+</form>

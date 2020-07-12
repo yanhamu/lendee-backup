@@ -9,6 +9,7 @@ namespace Lendee.Web.Configurations
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<EntityRepository>().As<IEntityRepository>();
+            builder.RegisterType<ContractRepository>().As<IContractRepository>();
         }
     }
 }

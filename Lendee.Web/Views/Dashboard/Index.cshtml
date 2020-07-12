@@ -1,4 +1,5 @@
-﻿
+﻿@inject IViewLocalizer Localizer
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,4 +7,14 @@
 
 <h1>Nástěnka</h1>
 
-<a asp-controller="Entities" asp-action="List">Adresář osob</a>
+<ul>
+    <li>
+        <a asp-controller="Entities" asp-action="List">@Localizer["Entities"]</a>
+    </li>
+    <li>
+        <a asp-controller="ContractBuilder" asp-action="Create">@Localizer["New Contract"] </a>
+    </li>
+    <li>
+        <a asp-controller="Contracts" asp-action="List">@Localizer["Contracts"] </a>
+    </li>
+</ul>

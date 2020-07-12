@@ -1,12 +1,12 @@
 ﻿@model Lendee.Web.Features.Entity.EntityViewModel
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "SetLender";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Upravit</h1>
+<h1>Lender</h1>
 
-<form method="post" asp-action="Edit">
+<form method="post" asp-route-contractId="@ViewData["contractId"]">
     @await Html.PartialAsync("_Entity", Model)
     <div class="form-group row">
         <div class="offset-sm-2 col-sm-10">

@@ -11,6 +11,7 @@
     <None Remove="Scripts\0003_insert_users.sql" />
     <None Remove="Scripts\0004_create_schema.sql" />
     <None Remove="Scripts\0005_create_table_legal_entities.sql" />
+    <None Remove="Scripts\0006_create_table_contracts.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Scripts\0004_create_schema.sql" />
+    <EmbeddedResource Include="Scripts\0006_create_table_contracts.sql" />
     <EmbeddedResource Include="Scripts\0005_create_table_legal_entities.sql" />
     <EmbeddedResource Include="Scripts\0003_insert_users.sql" />
   </ItemGroup>

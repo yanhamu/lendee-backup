@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Lendee.Core.Domain.Model.Contract>
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>List</h1>
+
+<table class="table table-sm">
+    @foreach (var contract in Model)
+    {
+        <tr>
+            <td>@contract.Id</td>
+            <td>@contract.Name</td>
+        </tr>
+    }
+</table>
