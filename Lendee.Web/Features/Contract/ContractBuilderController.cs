@@ -1,5 +1,6 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
+using Lendee.Web.Features.Common;
 using Lendee.Web.Features.Entity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -10,13 +11,16 @@ namespace Lendee.Web.Features.Contract
     {
         private readonly IEntityRepository entityRepository;
         private readonly IContractRepository contractRepository;
+        private readonly LegalEntityFactory legalEntityFactory;
 
         public ContractBuilderController(
             IEntityRepository entityRepository,
-            IContractRepository contractRepository)
+            IContractRepository contractRepository,
+            LegalEntityFactory legalEntityFactory)
         {
             this.entityRepository = entityRepository;
             this.contractRepository = contractRepository;
+            this.legalEntityFactory = legalEntityFactory;
         }
 
         [HttpGet]
@@ -52,19 +56,7 @@ namespace Lendee.Web.Features.Contract
         [HttpPost]
         public async Task<IActionResult> SetLendee(long contractId, EntityViewModel model)
         {
-            var entity = new LegalEntity
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                BankAccountNumber = model.BankAccountNumber,
-                Note = model.Note,
-                CompanyName = model.CompanyName,
-                IdentifyingNumber = model.IdentifyingNumber,
-                TaxIdentifyingNumber = model.TaxIdentifyingNumber
-            };
-
+            var entity = legalEntityFactory.Create(model);
             var saved = entityRepository.Add(entity);
             await entityRepository.Save();
 
@@ -85,19 +77,7 @@ namespace Lendee.Web.Features.Contract
         [HttpPost]
         public async Task<IActionResult> SetLender(long contractId, EntityViewModel model)
         {
-            var entity = new LegalEntity
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                BankAccountNumber = model.BankAccountNumber,
-                Note = model.Note,
-                CompanyName = model.CompanyName,
-                IdentifyingNumber = model.IdentifyingNumber,
-                TaxIdentifyingNumber = model.TaxIdentifyingNumber
-            };
-
+            var entity = legalEntityFactory.Create(model);
             var saved = entityRepository.Add(entity);
             await entityRepository.Save();
 

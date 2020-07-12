@@ -34,7 +34,8 @@ namespace Lendee.Web
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            builder.RegisterModule(new LendeeModule());
+            builder.RegisterModule<LendeeModule>();
+            builder.RegisterModule<LendeeWebModule>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

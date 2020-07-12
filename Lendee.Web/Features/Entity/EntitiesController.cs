@@ -1,5 +1,6 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
+using Lendee.Web.Features.Common;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,10 +9,12 @@ namespace Lendee.Web.Features.Entity
     public class EntitiesController : Controller
     {
         private readonly IEntityRepository repository;
+        private readonly LegalEntityFactory legalEntityFactory;
 
-        public EntitiesController(IEntityRepository entityRepository)
+        public EntitiesController(IEntityRepository entityRepository, LegalEntityFactory legalEntityFactory)
         {
             this.repository = entityRepository;
+            this.legalEntityFactory = legalEntityFactory;
         }
 
         [HttpGet]
@@ -30,19 +33,8 @@ namespace Lendee.Web.Features.Entity
         [HttpPost]
         public async Task<ActionResult> Create(EntityViewModel model)
         {
-            var entity = new LegalEntity
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                BankAccountNumber = model.BankAccountNumber,
-                Note = model.Note,
-                CompanyName = model.CompanyName,
-                IdentifyingNumber = model.IdentifyingNumber,
-                TaxIdentifyingNumber = model.TaxIdentifyingNumber
-            };
-
+            var entity = legalEntityFactory.Create(model);
+            
             var saved = repository.Add(entity);
             await repository.Save();
 
