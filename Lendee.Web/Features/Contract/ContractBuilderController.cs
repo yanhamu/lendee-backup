@@ -3,6 +3,7 @@ using Lendee.Core.Domain.Model;
 using Lendee.Web.Features.Common;
 using Lendee.Web.Features.Entity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Lendee.Web.Features.Contract
@@ -95,6 +96,8 @@ namespace Lendee.Web.Features.Contract
         [HttpPost]
         public async Task<IActionResult> SetLender(long contractId, EntityViewModel model)
         {
+            ViewData["contractId"] = contractId;
+
             var entity = legalEntityFactory.Create(model);
             var saved = entityRepository.Add(entity);
             await entityRepository.Save();
@@ -103,7 +106,32 @@ namespace Lendee.Web.Features.Contract
             contract.LenderId = saved.Id;
             await contractRepository.Save();
 
+            switch (contract.Type)
+            {
+                case ContractType.Credit:
+                    break;
+                case ContractType.Loan:
+                    break;
+                case ContractType.Rent:
+                    return RedirectToAction("Rent", new { contractId = contractId });
+                default:
+                    throw new ArgumentException();
+            }
+
             return RedirectToAction("SetLender", new { contractId = contractId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Rent(long contractId)
+        {
+            var contract = await contractRepository.Find(contractId);
+            return View(new RentViewModel() { ValidFrom = DateTime.Now });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Rent(RentViewModel model)
+        {
+            return View(model);
         }
     }
 
@@ -116,5 +144,17 @@ namespace Lendee.Web.Features.Contract
         public long? LenderId { get; set; }
         public long? LendeeId { get; set; }
         public string Note { get; set; }
+    }
+
+    public class RentViewModel
+    {
+        public long ContractId { get; set; }
+        public decimal PaymentAmount { get; set; }
+        public DateTime ValidFrom { get; set; }
+        public DateTime? ValidUntil { get; set; }
+        public PaymentTerm PaymentTerm { get; set; }
+
+        public int Day { get; set; }
+        public int Month { get; set; }
     }
 }
