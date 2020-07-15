@@ -21,7 +21,6 @@ namespace Lendee.Core.Domain.Model
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
         public PaymentTerm PaymentTerm { get; set; }
-
     }
 
     public class Credit : Contract

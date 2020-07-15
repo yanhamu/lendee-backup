@@ -47,9 +47,18 @@ namespace Lendee.Web.Features.Contract
         }
 
         [HttpGet]
-        public IActionResult SetLendee(long contractId)
+        public async Task<IActionResult> SetLendee(long contractId)
         {
             ViewData["contractId"] = contractId;
+
+            var contract = await contractRepository.Find(contractId);
+            if (contract.LendeeId.HasValue)
+            {
+                var lendee = await entityRepository.Find(contract.LendeeId.Value);
+                var model = legalEntityFactory.Create(lendee);
+                return View(model);
+            }
+
             return View();
         }
 
@@ -68,9 +77,18 @@ namespace Lendee.Web.Features.Contract
         }
 
         [HttpGet]
-        public IActionResult SetLender(long contractId)
+        public async Task<IActionResult> SetLender(long contractId)
         {
             ViewData["contractId"] = contractId;
+
+            var contract = await contractRepository.Find(contractId);
+            if (contract.LenderId.HasValue)
+            {
+                var lender = await entityRepository.Find(contract.LenderId.Value);
+                var model = legalEntityFactory.Create(lender);
+                return View(model);
+            }
+
             return View();
         }
 

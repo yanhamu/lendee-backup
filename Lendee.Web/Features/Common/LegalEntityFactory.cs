@@ -20,5 +20,22 @@ namespace Lendee.Web.Features.Common
                 TaxIdentifyingNumber = model.TaxIdentifyingNumber
             };
         }
+
+        public EntityViewModel Create(LegalEntity entity)
+        {
+            return new EntityViewModel
+            {
+                FirstName = entity.FirstName,
+                LastName = entity.LastName,
+                Email = entity.Email,
+                PhoneNumber = entity.PhoneNumber,
+                BankAccountNumber = entity.BankAccountNumber,
+                Note = entity.Note,
+                CompanyName = entity.CompanyName,
+                IdentifyingNumber = entity.IdentifyingNumber,
+                TaxIdentifyingNumber = entity.TaxIdentifyingNumber,
+                Id = entity.Id
+            };
+        }
     }
 }

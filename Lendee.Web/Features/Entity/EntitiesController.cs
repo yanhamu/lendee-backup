@@ -1,5 +1,4 @@
 ﻿using Lendee.Core.Domain.Interfaces;
-using Lendee.Core.Domain.Model;
 using Lendee.Web.Features.Common;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -34,7 +33,7 @@ namespace Lendee.Web.Features.Entity
         public async Task<ActionResult> Create(EntityViewModel model)
         {
             var entity = legalEntityFactory.Create(model);
-            
+
             var saved = repository.Add(entity);
             await repository.Save();
 
