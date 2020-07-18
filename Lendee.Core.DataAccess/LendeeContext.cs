@@ -33,8 +33,18 @@ namespace Lendee.Core.DataAccess
             contract.Property(x => x.LenderId).HasColumnName("lender");
             contract.Property(x => x.LendeeId).HasColumnName("lendee");
             contract.Property(x => x.Note).HasColumnName("note");
+            contract.Property(x => x.PaymentTermType).HasColumnName("payment_term_type");
+            contract.Property(x => x.PaymentAmount).HasColumnName("payment_amount");
             contract.HasOne(x => x.Lendee).WithMany().HasForeignKey(x => x.LendeeId).IsRequired(false);
             contract.HasOne(x => x.Lender).WithMany().HasForeignKey(x => x.LenderId).IsRequired(false);
+            contract.HasDiscriminator(x=>x.Type)
+                .HasValue<Contract>(ContractType.Draft)
+                .HasValue<Rent>(ContractType.Rent)
+                .HasValue<Credit>(ContractType.Credit);
+
+            var rent = modelBuilder.Entity<Rent>();
+            rent.Property(x => x.ValidFrom).HasColumnName("valid_from");
+            rent.Property(x => x.ValidUntil).HasColumnName("valid_until");
         }
     }
 }

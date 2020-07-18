@@ -33,7 +33,7 @@ namespace Lendee.Web.Features.Contract
         [HttpPost]
         public async Task<IActionResult> Create(DraftContract contract)
         {
-            var toSave = new Lendee.Core.Domain.Model.Contract()
+            var toSave = new Core.Domain.Model.Contract()
             {
                 Currency = contract.Currency,
                 Name = contract.Name,
@@ -122,16 +122,33 @@ namespace Lendee.Web.Features.Contract
         }
 
         [HttpGet]
-        public async Task<IActionResult> Rent(long contractId)
+        public async Task<IActionResult> Rent(long? contractId)
         {
-            var contract = await contractRepository.Find(contractId);
-            return View(new RentViewModel() { ValidFrom = DateTime.Now });
+            if (contractId.HasValue == false)
+                return View(new RentViewModel());
+
+            var contract = await contractRepository.FindRent(contractId.Value);
+            return View(new RentViewModel()
+            {
+                ContractId = contract.Id,
+                PaymentTermType = contract.PaymentTermType,
+                PaymentAmount = contract.PaymentAmount,
+                ValidUntil = contract.ValidUntil,
+                ValidFrom = DateTime.Now
+            });
         }
 
         [HttpPost]
         public async Task<IActionResult> Rent(RentViewModel model)
         {
-            return View(model);
+            var rent = await contractRepository.FindRent(model.ContractId);
+            rent.PaymentTermType = model.PaymentTermType;
+            rent.PaymentAmount = model.PaymentAmount;
+            rent.ValidFrom = model.ValidFrom;
+            rent.ValidUntil = model.ValidUntil;
+
+            await contractRepository.Save();
+            return RedirectToAction("List", "Contracts");
         }
     }
 
@@ -149,10 +166,10 @@ namespace Lendee.Web.Features.Contract
     public class RentViewModel
     {
         public long ContractId { get; set; }
-        public decimal PaymentAmount { get; set; }
+        public decimal? PaymentAmount { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
-        public PaymentTerm PaymentTerm { get; set; }
+        public PaymentTerm PaymentTermType { get; set; }
 
         public int Day { get; set; }
         public int Month { get; set; }

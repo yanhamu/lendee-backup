@@ -13,14 +13,14 @@ namespace Lendee.Core.Domain.Model
         public long? LendeeId { get; set; }
         public LegalEntity Lendee { get; set; }
         public string Note { get; set; }
+        public PaymentTerm PaymentTermType { get; set; }
+        public decimal? PaymentAmount { get; set; }
     }
 
     public class Rent : Contract
     {
-        public decimal PaymentAmount { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
-        public PaymentTerm PaymentTerm { get; set; }
     }
 
     public class Credit : Contract
@@ -30,6 +30,7 @@ namespace Lendee.Core.Domain.Model
 
     public enum PaymentTerm
     {
+        NotSet = 0,
         Monthly = 1,
         Quaterly = 2,
         HalfYear = 3,
@@ -39,7 +40,7 @@ namespace Lendee.Core.Domain.Model
 
     public enum ContractType : int
     {
-
+        Draft = 0,
         Credit = 1, // uver
         Loan = 2, // pujcka
         Rent = 3, // najem

@@ -35,17 +35,14 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">@Localizer["Payment Term"]</label>
         <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
-            <label class="btn btn-secondary @(Model.PaymentTerm == Lendee.Core.Domain.Model.PaymentTerm.Monthly ? "active" : "")">
-                <input type="radio" autocomplete="off" asp-for="PaymentTerm" value="@Lendee.Core.Domain.Model.PaymentTerm.Monthly" > Monthly
+            <label class="btn btn-secondary @(Model.PaymentTermType == Lendee.Core.Domain.Model.PaymentTerm.Monthly ? "active" : "")">
+                <input type="radio" autocomplete="off" asp-for="PaymentTermType" value="@Lendee.Core.Domain.Model.PaymentTerm.Monthly" > Monthly
             </label>
-            <label class="btn btn-secondary @(Model.PaymentTerm == Lendee.Core.Domain.Model.PaymentTerm.Quaterly ? "active" : "")">
-                <input type="radio" autocomplete="off" asp-for="PaymentTerm" value="@Lendee.Core.Domain.Model.PaymentTerm.Quaterly"> Quaterly
+            <label class="btn btn-secondary @(Model.PaymentTermType == Lendee.Core.Domain.Model.PaymentTerm.Quaterly ? "active" : "")">
+                <input type="radio" autocomplete="off" asp-for="PaymentTermType" value="@Lendee.Core.Domain.Model.PaymentTerm.Quaterly"> Quaterly
             </label>
-            <label class="btn btn-secondary @(Model.PaymentTerm == Lendee.Core.Domain.Model.PaymentTerm.Annual ? "active" : "")">
-                <input type="radio" autocomplete="off" asp-for="PaymentTerm" value="@Lendee.Core.Domain.Model.PaymentTerm.Annual"> Annual
-            </label>
-            <label class="btn btn-secondary @(Model.PaymentTerm == Lendee.Core.Domain.Model.PaymentTerm.Custom ? "active" : "")">
-                <input type="radio" autocomplete="off" asp-for="PaymentTerm" value="@Lendee.Core.Domain.Model.PaymentTerm.Custom"> Custom
+            <label class="btn btn-secondary @(Model.PaymentTermType == Lendee.Core.Domain.Model.PaymentTerm.Annual ? "active" : "")">
+                <input type="radio" autocomplete="off" asp-for="PaymentTermType" value="@Lendee.Core.Domain.Model.PaymentTerm.Annual"> Annual
             </label>
         </div>
     </div>

@@ -26,6 +26,11 @@ namespace Lendee.Core.DataAccess
             return await context.Set<Contract>().FindAsync(contractId);
         }
 
+        public ValueTask<Rent> FindRent(long contractId)
+        {
+            return context.Set<Rent>().FindAsync(contractId);
+        }
+
         public async Task<IEnumerable<Contract>> GetAll()
         {
             return await context.Set<Contract>().ToListAsync();
