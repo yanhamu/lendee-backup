@@ -74,7 +74,7 @@ namespace Lendee.Web.Features.Contract
             contract.LendeeId = saved.Id;
             await contractRepository.Save();
 
-            return RedirectToAction("SetLender", new { contractId = contractId });
+            return RedirectToAction("SetLender", new { contractId });
         }
 
         [HttpGet]
@@ -109,16 +109,16 @@ namespace Lendee.Web.Features.Contract
             switch (contract.Type)
             {
                 case ContractType.Credit:
-                    return RedirectToAction("Credit", new { contractId = contractId });
+                    return RedirectToAction("Credit", new { contractId });
                 case ContractType.Loan:
                     break;
                 case ContractType.Rent:
-                    return RedirectToAction("Rent", new { contractId = contractId });
+                    return RedirectToAction("Rent", new { contractId });
                 default:
                     throw new ArgumentException();
             }
 
-            return RedirectToAction("SetLender", new { contractId = contractId });
+            return RedirectToAction("SetLender", new { contractId });
         }
 
         [HttpGet]
@@ -185,7 +185,7 @@ namespace Lendee.Web.Features.Contract
 
             await contractRepository.Save();
 
-            return RedirectToAction("Credit", new { contractId = credit.Id });
+            return RedirectToAction("List", "Contracts");
         }
     }
 

@@ -58,6 +58,14 @@ namespace Lendee.Core.DataAccess
             credit.Property(x => x.ValidUntil).HasColumnName("valid_until");
             credit.Property(x => x.InterestRate).HasColumnName("interest_rate");
             credit.Property(x => x.PrincipalSum).HasColumnName("principal_sum");
+
+            var payment = modelBuilder.Entity<Payment>();
+            payment.ToTable("payments");
+            payment.HasKey(x => x.Id);
+            payment.Property(x => x.Amount).HasColumnName("amount");
+            payment.Property(x => x.PaidAt).HasColumnName("paid_at");
+            payment.Property(x => x.ContractId).HasColumnName("contract_id");
+            payment.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);
         }
     }
 }

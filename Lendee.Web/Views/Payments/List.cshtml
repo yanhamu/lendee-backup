@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Lendee.Core.Domain.Model.Payment>
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Payments</h1>
+
+<table>
+    @foreach (var payment in Model)
+    {
+        <tr>
+            <td>@payment.Id</td>
+            <td>@payment.Amount</td>
+        </tr>
+    }
+</table>

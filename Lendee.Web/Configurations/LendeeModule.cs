@@ -10,6 +10,7 @@ namespace Lendee.Web.Configurations
         {
             builder.RegisterType<EntityRepository>().As<IEntityRepository>();
             builder.RegisterType<ContractRepository>().As<IContractRepository>();
+            builder.RegisterType<PaymentRepository>().As<IPaymentRepository>();
         }
     }
 }
