@@ -109,7 +109,7 @@ namespace Lendee.Web.Features.Contract
             switch (contract.Type)
             {
                 case ContractType.Credit:
-                    break;
+                    return RedirectToAction("Credit", new { contractId = contractId });
                 case ContractType.Loan:
                     break;
                 case ContractType.Rent:
@@ -122,19 +122,18 @@ namespace Lendee.Web.Features.Contract
         }
 
         [HttpGet]
-        public async Task<IActionResult> Rent(long? contractId)
+        public async Task<IActionResult> Rent(long contractId)
         {
-            if (contractId.HasValue == false)
-                return View(new RentViewModel());
-
-            var contract = await contractRepository.FindRent(contractId.Value);
+            var contract = await contractRepository.FindRent(contractId);
             return View(new RentViewModel()
             {
                 ContractId = contract.Id,
                 PaymentTermType = contract.PaymentTermType,
                 PaymentAmount = contract.PaymentAmount,
                 ValidUntil = contract.ValidUntil,
-                ValidFrom = DateTime.Now
+                ValidFrom = DateTime.Now,
+                Day = contract.PaymentTermData?.Day,
+                Month = contract.PaymentTermData?.Month
             });
         }
 
@@ -146,9 +145,47 @@ namespace Lendee.Web.Features.Contract
             rent.PaymentAmount = model.PaymentAmount;
             rent.ValidFrom = model.ValidFrom;
             rent.ValidUntil = model.ValidUntil;
+            rent.PaymentTermData = new PaymentTerm()
+            {
+                Day = model.Day,
+                Month = model.Month
+            };
 
             await contractRepository.Save();
             return RedirectToAction("List", "Contracts");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Credit(long contractId)
+        {
+            var credit = await contractRepository.FindCredit(contractId);
+            return View(new CreditViewModel()
+            {
+                Id = credit.Id,
+                InterestRate = credit.InterestRate,
+                PaymentTermType = credit.PaymentTermType,
+                PrincipalSum = credit.PrincipalSum,
+                ValidFrom = credit.ValidFrom == default ? DateTime.Now : credit.ValidFrom,
+                ValidUntil = credit.ValidUntil ?? DateTime.Now.AddYears(1),
+                Day = credit.PaymentTermData?.Day,
+                Month = credit.PaymentTermData?.Month
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Credit(CreditViewModel model)
+        {
+            var credit = await contractRepository.FindCredit(model.Id);
+            credit.InterestRate = model.InterestRate;
+            credit.PaymentTermType = model.PaymentTermType;
+            credit.PaymentTermData = new PaymentTerm() { Day = model.Day, Month = model.Month };
+            credit.PrincipalSum = model.PrincipalSum;
+            credit.ValidFrom = model.ValidFrom;
+            credit.ValidUntil = model.ValidUntil;
+
+            await contractRepository.Save();
+
+            return RedirectToAction("Credit", new { contractId = credit.Id });
         }
     }
 
@@ -169,9 +206,21 @@ namespace Lendee.Web.Features.Contract
         public decimal? PaymentAmount { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
-        public PaymentTerm PaymentTermType { get; set; }
+        public PaymentTermType PaymentTermType { get; set; }
 
-        public int Day { get; set; }
-        public int Month { get; set; }
+        public int? Day { get; set; }
+        public int? Month { get; set; }
+    }
+
+    public class CreditViewModel
+    {
+        public long Id { get; set; }
+        public DateTime ValidFrom { get; set; }
+        public DateTime ValidUntil { get; set; }
+        public decimal InterestRate { get; set; }
+        public decimal PrincipalSum { get; set; }
+        public PaymentTermType PaymentTermType { get; set; }
+        public int? Day { get; set; }
+        public int? Month { get; set; }
     }
 }

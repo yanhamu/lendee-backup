@@ -37,14 +37,27 @@ namespace Lendee.Core.DataAccess
             contract.Property(x => x.PaymentAmount).HasColumnName("payment_amount");
             contract.HasOne(x => x.Lendee).WithMany().HasForeignKey(x => x.LendeeId).IsRequired(false);
             contract.HasOne(x => x.Lender).WithMany().HasForeignKey(x => x.LenderId).IsRequired(false);
-            contract.HasDiscriminator(x=>x.Type)
+            contract.HasDiscriminator(x => x.Type)
                 .HasValue<Contract>(ContractType.Draft)
                 .HasValue<Rent>(ContractType.Rent)
                 .HasValue<Credit>(ContractType.Credit);
+            contract.OwnsOne(
+                x => x.PaymentTermData,
+                p =>
+                {
+                    p.Property(d => d.Day).HasColumnName("term_day");
+                    p.Property(d => d.Month).HasColumnName("term_month");
+                });
 
             var rent = modelBuilder.Entity<Rent>();
             rent.Property(x => x.ValidFrom).HasColumnName("valid_from");
             rent.Property(x => x.ValidUntil).HasColumnName("valid_until");
+
+            var credit = modelBuilder.Entity<Credit>();
+            credit.Property(x => x.ValidFrom).HasColumnName("valid_from");
+            credit.Property(x => x.ValidUntil).HasColumnName("valid_until");
+            credit.Property(x => x.InterestRate).HasColumnName("interest_rate");
+            credit.Property(x => x.PrincipalSum).HasColumnName("principal_sum");
         }
     }
 }

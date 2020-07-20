@@ -11,5 +11,6 @@ namespace Lendee.Core.Domain.Interfaces
         Task<Contract> Find(long contractId);
         Task<IEnumerable<Contract>> GetAll();
         ValueTask<Rent> FindRent(long contractId);
+        ValueTask<Credit> FindCredit(long contractId);
     }
 }

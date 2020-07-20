@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -13,6 +13,8 @@
     <None Remove="Scripts\0005_create_table_legal_entities.sql" />
     <None Remove="Scripts\0006_create_table_contracts.sql" />
     <None Remove="Scripts\0007_alter_table_contracts_rent.sql" />
+    <None Remove="Scripts\0008_alter_table_contracts_credit.sql" />
+    <None Remove="Scripts\0009_alter_table_contracts_terms.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,8 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Scripts\0004_create_schema.sql" />
+    <EmbeddedResource Include="Scripts\0009_alter_table_contracts_terms.sql" />
+    <EmbeddedResource Include="Scripts\0008_alter_table_contracts_credit.sql" />
     <EmbeddedResource Include="Scripts\0007_alter_table_contracts_rent.sql" />
     <EmbeddedResource Include="Scripts\0006_create_table_contracts.sql" />
     <EmbeddedResource Include="Scripts\0005_create_table_legal_entities.sql" />
