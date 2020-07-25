@@ -16,6 +16,14 @@ namespace Lendee.Core.DataAccess
             this.context = context;
         }
 
+        public Payment Add(Payment payment)
+        {
+            var entity = context
+                .Set<Payment>()
+                .Add(payment);
+            return entity.Entity;
+        }
+
         public async Task<IEnumerable<Payment>> GetLast(int take, int skip)
         {
             return await context
@@ -24,6 +32,11 @@ namespace Lendee.Core.DataAccess
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
+        }
+
+        public Task Save()
+        {
+            return context.SaveChangesAsync();
         }
     }
 }

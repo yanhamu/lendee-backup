@@ -1,4 +1,5 @@
-﻿@inject IViewLocalizer Localizer
+﻿@model IEnumerable<Lendee.Core.Domain.Model.Contract>
+@inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = "Index";
@@ -21,3 +22,26 @@
         <a asp-controller="Payments" asp-action="List">@Localizer["Payments"] </a>
     </li>
 </ul>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Typ</th>
+            <th>Nazev</th>
+            <th>Detail</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var contract in Model)
+        {
+            <tr>
+                <td>@contract.Id</td>
+                <td>@contract.Type</td>
+                <td>@contract.Name</td>
+                <td>Detail</td>
+            </tr>
+        }
+    </tbody>
+</table>
