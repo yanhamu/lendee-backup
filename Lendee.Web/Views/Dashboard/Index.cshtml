@@ -10,6 +10,9 @@
 
 <ul>
     <li>
+        <a asp-controller="Payments" asp-action="Create">@Localizer["Add Payment"] </a>
+    </li>
+    <li>
         <a asp-controller="ContractBuilder" asp-action="Create">@Localizer["New Contract"] </a>
     </li>
 </ul>
@@ -31,7 +34,7 @@
                 <td>@contract.Id</td>
                 <td>@contract.Type</td>
                 <td>@contract.Name</td>
-                <td>Detail</td>
+                <td><a asp-controller="Contracts" asp-action="Detail" asp-route-id="@contract.Id">Detail</a></td>
             </tr>
         }
     </tbody>

@@ -1,0 +1,79 @@
+﻿@model Lendee.Web.Features.Contract.ContractsController.RentDetailViewModel
+@{
+    ViewData["Title"] = "DetailRent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Detail</h1>
+<hr />
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-sm">
+            <tr>
+                <td>ID:</td>
+                <td>@Model.ContractId</td>
+            </tr>
+            <tr>
+                <td>Name:</td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <td>Currency:</td>
+                <td>@Model.Currency</td>
+            </tr>
+            <tr>
+                <td>Note:</td>
+                <td>@Model.Note</td>
+            </tr>
+            <tr>
+                <td>Valid from:</td>
+                <td>@Model.ValidFrom</td>
+            </tr>
+            <tr>
+                <td>Valid until:</td>
+                <td>@Model.ValidUntil</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="card mb-4">
+            <h5 class="card-header bg-secondary text-white">Lendee</h5>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td>Id:</td><td>@Model.Lendee.Id</td></tr>
+                    <tr><td>First name:</td><td>@Model.Lendee.FirstName</td></tr>
+                    <tr><td>Last name:</td><td>@Model.Lendee.LastName</td></tr>
+                    <tr><td>Company:</td><td>@Model.Lendee.CompanyName</td></tr>
+                    <tr><td>Email:</td><td>@Model.Lendee.Email</td></tr>
+                    <tr><td>Phone:</td><td>@Model.Lendee.PhoneNumber</td></tr>
+                    <tr><td>Bank Account:</td><td>@Model.Lendee.BankAccountNumber</td></tr>
+                    <tr><td>Identifying number:</td><td>@Model.Lendee.IdentifyingNumber</td></tr>
+                    <tr><td>Tax identifying number:</td><td>@Model.Lendee.TaxIdentifyingNumber</td></tr>
+                    <tr><td>Note:</td><td>@Model.Lendee.Note</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card mb-4">
+            <h5 class="card-header bg-secondary text-white">Lender</h5>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr><td>Id:</td><td>@Model.Lender.Id</td></tr>
+                    <tr><td>First name:</td><td>@Model.Lender.FirstName</td></tr>
+                    <tr><td>Last name:</td><td>@Model.Lender.LastName</td></tr>
+                    <tr><td>Company:</td><td>@Model.Lender.CompanyName</td></tr>
+                    <tr><td>Email:</td><td>@Model.Lender.Email</td></tr>
+                    <tr><td>Phone:</td><td>@Model.Lender.PhoneNumber</td></tr>
+                    <tr><td>Bank Account:</td><td>@Model.Lender.BankAccountNumber</td></tr>
+                    <tr><td>Identifying number:</td><td>@Model.Lender.IdentifyingNumber</td></tr>
+                    <tr><td>Tax identifying number:</td><td>@Model.Lender.TaxIdentifyingNumber</td></tr>
+                    <tr><td>Note:</td><td>@Model.Lender.Note</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
