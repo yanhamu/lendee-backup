@@ -22,10 +22,9 @@ namespace Lendee.Core.DataAccess
             return saved.Entity;
         }
 
-        public async Task<LegalEntity> Find(long id)
+        public ValueTask<LegalEntity> Find(long id)
         {
-            var result = await context.Set<LegalEntity>().FindAsync(id);
-            return result;
+            return context.Set<LegalEntity>().FindAsync(id);
         }
 
         public async Task<IEnumerable<LegalEntity>> List()

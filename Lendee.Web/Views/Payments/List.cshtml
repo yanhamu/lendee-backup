@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Lendee.Core.Domain.Model.Payment>
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,12 +7,14 @@
 
 <h1>Payments</h1>
 
-<table>
+<table class="table table-sm">
     @foreach (var payment in Model)
     {
-        <tr>
-            <td>@payment.Id</td>
-            <td>@payment.Amount</td>
-        </tr>
+    <tr>
+        <td>@payment.Id</td>
+        <td>@payment.Amount</td>
+        <td><a asp-action="Edit" asp-route-id="@payment.Id">Edit</a></td>
+    </tr>
     }
 </table>
+<a asp-controller="Payments" asp-action="Create">@Localizer["New Payment"] </a>

@@ -7,7 +7,7 @@ namespace Lendee.Core.Domain.Interfaces
     public interface IEntityRepository
     {
         Task<IEnumerable<LegalEntity>> List();
-        Task<LegalEntity> Find(long id);
+        ValueTask<LegalEntity> Find(long id);
         Task Save();
         LegalEntity Add(LegalEntity entity);
     }

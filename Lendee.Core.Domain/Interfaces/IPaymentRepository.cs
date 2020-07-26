@@ -9,5 +9,6 @@ namespace Lendee.Core.Domain.Interfaces
         Task<IEnumerable<Payment>> GetLast(int take, int skip);
         Payment Add(Payment payment);
         Task Save();
+        ValueTask<Payment> Find(long id);
     }
 }

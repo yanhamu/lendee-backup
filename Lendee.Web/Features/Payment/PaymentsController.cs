@@ -41,6 +41,34 @@ namespace Lendee.Web.Features.Payment
             await repository.Save();
             return RedirectToAction(nameof(List));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(long id)
+        {
+            var payment = await repository.Find(id);
+            return View(new PaymentViewModel()
+            {
+                Id = payment.Id,
+                Amount = payment.Amount,
+                ContractId = payment.ContractId,
+                PaidAt = payment.PaidAt
+
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PaymentViewModel model)
+        {
+            var payment = await repository.Find(model.Id);
+
+            payment.Amount = model.Amount;
+            payment.ContractId = model.ContractId;
+            payment.PaidAt = model.PaidAt;
+
+            await repository.Save();
+
+            return RedirectToAction(nameof(List));
+        }
     }
 
     public class PaymentViewModel

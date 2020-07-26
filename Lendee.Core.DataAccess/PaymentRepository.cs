@@ -24,6 +24,12 @@ namespace Lendee.Core.DataAccess
             return entity.Entity;
         }
 
+        public ValueTask<Payment> Find(long id)
+        {
+            return context.Set<Payment>()
+                .FindAsync(id);
+        }
+
         public async Task<IEnumerable<Payment>> GetLast(int take, int skip)
         {
             return await context
