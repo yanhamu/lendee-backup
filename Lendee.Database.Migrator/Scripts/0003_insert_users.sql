@@ -1,1 +1,1 @@
-﻿insert into users.users values('1B96B553-7ACE-4EF4-85C7-5F0EA7E020A6', 'bob', 'g36aPKo11fMuhv35ixLsX2EYJDBdnLpDd2b2AAWZdnEwSjAz')
+﻿insert into lendee.users values('1B96B553-7ACE-4EF4-85C7-5F0EA7E020A6', 'bob', 'g36aPKo11fMuhv35ixLsX2EYJDBdnLpDd2b2AAWZdnEwSjAz')

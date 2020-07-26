@@ -8,10 +8,17 @@
 <h1>Adresář</h1>
 
 <table class="table table-sm">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Phone</th>
+        <th></th>
+    </tr>
     @foreach (var entity in Model)
     {
         <tr>
-            <td>@entity.Id</td>
+            <td>#@entity.Id</td>
             <td>@entity.FirstName @entity.LastName</td>
             <td>@entity.CompanyName</td>
             <td>@entity.PhoneNumber</td>

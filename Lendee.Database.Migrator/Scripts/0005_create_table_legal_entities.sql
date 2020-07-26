@@ -1,4 +1,4 @@
-﻿create table core.legal_entities(
+﻿create table lendee.legal_entities(
 	id bigint identity(100,1) primary key,
 	firstname nvarchar(60),
 	lastname nvarchar(60),

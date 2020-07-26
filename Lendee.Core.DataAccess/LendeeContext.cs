@@ -8,7 +8,7 @@ namespace Lendee.Core.DataAccess
         public LendeeContext(DbContextOptions<LendeeContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("core");
+            modelBuilder.HasDefaultSchema("lendee");
 
             var legalEntity = modelBuilder.Entity<LegalEntity>();
             legalEntity.ToTable("legal_entities");

@@ -1,1 +1,1 @@
-﻿create schema core
+﻿--create schema lendee

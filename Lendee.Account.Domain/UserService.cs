@@ -36,14 +36,14 @@ namespace Lendee.Account.Domain
             var s = new PasswordService();
             var hashedPassword = s.GetHashedPassword(password);
             var id = Guid.NewGuid();
-            var sql = @"insert into users.users values (@id, @username, @password)";
+            var sql = @"insert into lendee.users values (@id, @username, @password)";
             await connection.ExecuteAsync(sql, new { id, username, password = hashedPassword });
             return id;
         }
 
         private async Task<UserDto> GetUser(string username)
         {
-            var sql = "select id, password from users.users where username = @username";
+            var sql = "select id, password from lendee.users where username = @username";
             var userDto = await connection.QuerySingleOrDefaultAsync<UserDto>(sql, new { username });
             return userDto;
         }

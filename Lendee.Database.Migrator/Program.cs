@@ -30,7 +30,7 @@ namespace Lendee.Database.Migrator
             var upgrader = DeployChanges.To
                 .SqlDatabase(connectionString)
                 .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
-                .JournalToSqlTable("dbo", "schema_versions")
+                .JournalToSqlTable("lendee", "schema_versions")
                 .LogToConsole()
                 .Build();
 
