@@ -40,6 +40,11 @@ namespace Lendee.Core.DataAccess
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Payment>> List(long contractId)
+        {
+            return await context.Set<Payment>().Where(x => x.ContractId == contractId).OrderByDescending(x => x.PaidAt).ToListAsync();
+        }
+
         public Task Save()
         {
             return context.SaveChangesAsync();

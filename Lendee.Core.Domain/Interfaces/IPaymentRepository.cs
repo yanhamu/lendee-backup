@@ -10,5 +10,6 @@ namespace Lendee.Core.Domain.Interfaces
         Payment Add(Payment payment);
         Task Save();
         ValueTask<Payment> Find(long id);
+        Task<IEnumerable<Payment>> List(long contractId);
     }
 }
