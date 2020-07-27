@@ -7,6 +7,23 @@
 <h1>Rent</h1>
 <hr />
 
+@functions{ public string DetermineColor(Lendee.Core.Domain.Repayment.ActualRepayment repayment)
+    {
+        if (repayment.Paid == repayment.ToPay)
+        {
+            return "";
+        }
+        else if (repayment.Paid >= repayment.ToPay)
+        {
+            return "table-warning";
+        }
+        else
+        {
+            return "table-danger";
+        }
+    }
+}
+
 <div class="row">
     <div class="col-4">
         <div class="card mb-4">
@@ -81,7 +98,24 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-6">
+        <div class="card mb-4">
+            <h5 class="card-header bg-secondary text-white">Payments</h5>
+            <div class="card-body">
+                <table class="table table-sm">
+                    @foreach (var repayment in Model.Repayments.OrderByDescending(x=>x.Interval.To))
+                    {
+                        <tr class="@DetermineColor(repayment)">
+                            <td>@repayment.Interval.From.Date.ToString("dd.MM.yy") - @repayment.Interval.To.Date.ToString("dd.MM.yy")</td>
+                            <td>@repayment.ToPay</td>
+                            <td>@repayment.Paid</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
         <div class="card mb-4">
             <h5 class="card-header bg-secondary text-white">Payments</h5>
             <div class="card-body">
@@ -103,5 +137,4 @@
             </div>
         </div>
     </div>
-
 </div>

@@ -23,6 +23,10 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Report\" />
+  </ItemGroup>
+
 
 
 </Project>

@@ -12,6 +12,7 @@
     {
     <tr>
         <td>@payment.Id</td>
+        <td>@payment.PaidAt.ToString("dd.MM.yyyy")</td>
         <td>@payment.Amount</td>
         <td><a asp-action="Edit" asp-route-id="@payment.Id">Edit</a></td>
     </tr>

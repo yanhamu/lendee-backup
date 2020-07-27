@@ -1,5 +1,6 @@
 ﻿using Lendee.Account.Domain;
 using Lendee.Core.DataAccess;
+using Lendee.Core.Domain.Repayment;
 using Lendee.Web.Features.Account;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ namespace Lendee.Web.Configurations.ServiceCollectionExtensions
             services.AddScoped<IDbConnection>(x => new SqlConnection(configuration.GetConnectionString("lendee")));
             services.AddDbContext<LendeeContext>(options => { options.UseSqlServer(configuration.GetConnectionString("lendee")); });
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<RepaymentFactory>();
         }
     }
 }

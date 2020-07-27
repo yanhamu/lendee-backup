@@ -1,5 +1,6 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
+using Lendee.Core.Domain.Repayment;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,18 @@ namespace Lendee.Web.Features.Contract
         private readonly IContractRepository contractRepository;
         private readonly IEntityRepository entityRepository;
         private readonly IPaymentRepository paymentRepository;
+        private readonly RepaymentFactory repaymentFactory;
 
-        public ContractsController(IContractRepository contractRepository, IEntityRepository entityRepository, IPaymentRepository paymentRepository)
+        public ContractsController(
+            IContractRepository contractRepository, 
+            IEntityRepository entityRepository, 
+            IPaymentRepository paymentRepository,
+            RepaymentFactory repaymentFactory)
         {
             this.contractRepository = contractRepository;
             this.entityRepository = entityRepository;
             this.paymentRepository = paymentRepository;
+            this.repaymentFactory = repaymentFactory;
         }
 
         [HttpGet]
@@ -56,7 +63,8 @@ namespace Lendee.Web.Features.Contract
             var lender = await entityRepository.Find(rent.LenderId.Value);
             var lendee = await entityRepository.Find(rent.LendeeId.Value);
             var payments = await paymentRepository.List(rent.Id);
-            var model = new RentDetailViewModel(rent, lender, lendee, payments);
+            var repayments = await repaymentFactory.Calculate(id);
+            var model = new RentDetailViewModel(rent, lender, lendee, payments, repayments);
             return View(model);
         }
         public class RentDetailViewModel
@@ -70,8 +78,9 @@ namespace Lendee.Web.Features.Contract
             public EntityViewModel Lender { get; set; }
             public EntityViewModel Lendee { get; set; }
             public IEnumerable<PaymentViewModel> Payments { get; }
+            public IEnumerable<ActualRepayment> Repayments { get; }
 
-            public RentDetailViewModel(Rent rent, LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Payment> payments)
+            public RentDetailViewModel(Rent rent, LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Payment> payments, IEnumerable<ActualRepayment> repayments)
             {
                 this.ContractId = rent.Id;
                 this.Name = rent.Name;
@@ -82,6 +91,7 @@ namespace Lendee.Web.Features.Contract
                 this.Lender = new EntityViewModel(lender);
                 this.Lendee = new EntityViewModel(lendee);
                 this.Payments = payments.Select(x => new PaymentViewModel(x));
+                this.Repayments = repayments.Select(x => x);
             }
         }
 
