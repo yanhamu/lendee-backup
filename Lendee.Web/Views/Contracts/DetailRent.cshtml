@@ -100,7 +100,7 @@
 <div class="row">
     <div class="col-6">
         <div class="card mb-4">
-            <h5 class="card-header bg-secondary text-white">Payments</h5>
+            <h5 class="card-header bg-secondary text-white">Repayments</h5>
             <div class="card-body">
                 <table class="table table-sm">
                     @foreach (var repayment in Model.Repayments.OrderByDescending(x=>x.Interval.To))
@@ -129,7 +129,7 @@
                     {
                         <tr>
                             <td>@payment.Id</td>
-                            <td>@payment.PaidAt</td>
+                            <td>@payment.PaidAt.ToString("dd.MM.yy")</td>
                             <td>@payment.Amount</td>
                         </tr>
                     }
