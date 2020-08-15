@@ -18,7 +18,23 @@ namespace Lendee.Core.Domain.Model
         public decimal? PaymentAmount { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
+        public PaymentSettings PaymentSettings
+        {
+            get
+            {
+                return new PaymentSettings()
+                {
+                    Day = PaymentTermData.Day.Value,
+                    Month = PaymentTermData.Month,
+                    PaymentAmount = PaymentAmount.Value,
+                    PaymentTermType = PaymentTermType,
+                    ValidFrom = ValidFrom,
+                    ValidUntil = ValidUntil
+                };
+            }
+        }
     }
+
 
     public class PaymentTerm
     {
@@ -51,7 +67,7 @@ namespace Lendee.Core.Domain.Model
         Credit = 1, // uver
         Loan = 2, // pujcka
         Rent = 3, // najem
-        // MISSING postoupeni
+                  // MISSING postoupeni
     }
 
     public enum Currency

@@ -13,13 +13,13 @@ namespace Lendee.Web.Features.Contract
     {
         private readonly IContractRepository contractRepository;
         private readonly IEntityRepository entityRepository;
-        private readonly IPaymentRepository paymentRepository;
+        private readonly IRepaymentRepository paymentRepository;
         private readonly RepaymentFactory repaymentFactory;
 
         public ContractsController(
             IContractRepository contractRepository, 
             IEntityRepository entityRepository, 
-            IPaymentRepository paymentRepository,
+            IRepaymentRepository paymentRepository,
             RepaymentFactory repaymentFactory)
         {
             this.contractRepository = contractRepository;
@@ -80,7 +80,7 @@ namespace Lendee.Web.Features.Contract
             public IEnumerable<PaymentViewModel> Payments { get; }
             public IEnumerable<ActualRepayment> Repayments { get; }
 
-            public RentDetailViewModel(Rent rent, LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Payment> payments, IEnumerable<ActualRepayment> repayments)
+            public RentDetailViewModel(Rent rent, LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Repayment> payments, IEnumerable<ActualRepayment> repayments)
             {
                 this.ContractId = rent.Id;
                 this.Name = rent.Name;
@@ -97,7 +97,7 @@ namespace Lendee.Web.Features.Contract
 
         public class PaymentViewModel
         {
-            public PaymentViewModel(Core.Domain.Model.Payment payment)
+            public PaymentViewModel(Core.Domain.Model.Repayment payment)
             {
                 this.Id = payment.Id;
                 this.PaidAt = payment.PaidAt;

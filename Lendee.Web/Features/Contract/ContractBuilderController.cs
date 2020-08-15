@@ -1,9 +1,12 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
+using Lendee.Core.Domain.Payments;
 using Lendee.Web.Features.Common;
 using Lendee.Web.Features.Entity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lendee.Web.Features.Contract
@@ -13,15 +16,21 @@ namespace Lendee.Web.Features.Contract
         private readonly IEntityRepository entityRepository;
         private readonly IContractRepository contractRepository;
         private readonly LegalEntityFactory legalEntityFactory;
+        private readonly PaymentFactory paymentFactory;
+        private readonly IPaymentRepository paymentsRepository;
 
         public ContractBuilderController(
             IEntityRepository entityRepository,
             IContractRepository contractRepository,
-            LegalEntityFactory legalEntityFactory)
+            IPaymentRepository paymentsRepository,
+            LegalEntityFactory legalEntityFactory,
+            PaymentFactory paymentFactory)
         {
             this.entityRepository = entityRepository;
             this.contractRepository = contractRepository;
             this.legalEntityFactory = legalEntityFactory;
+            this.paymentFactory = paymentFactory;
+            this.paymentsRepository = paymentsRepository;
         }
 
         [HttpGet]
@@ -152,6 +161,23 @@ namespace Lendee.Web.Features.Contract
             };
 
             await contractRepository.Save();
+            return RedirectToAction("Payments", new { contracitId = model.ContractId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Payments(long contractId)
+        {
+            var contract = await contractRepository.Find(contractId);
+            var payments = paymentFactory.BuildPayments(contractId, contract.PaymentSettings);
+            return View(new PaymentsViewModel() { ContractId = contractId, Payments = payments.ToList() });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Payments(PaymentsViewModel model)
+        {
+            var toSave = model.Payments.Select(x => new Lendee.Core.Domain.Model.Payment() { Amount = x.Amount, ContractId = model.ContractId, DueDate = x.DueDate });
+            paymentsRepository.SaveNewPayments(toSave, model.ContractId);
+            await paymentsRepository.Save();
             return RedirectToAction("List", "Contracts");
         }
 
@@ -186,6 +212,12 @@ namespace Lendee.Web.Features.Contract
             await contractRepository.Save();
 
             return RedirectToAction("List", "Contracts");
+        }
+
+        public class PaymentsViewModel
+        {
+            public List<Core.Domain.Model.Payment> Payments { get; set; }
+            public long ContractId { get; set; }
         }
     }
 

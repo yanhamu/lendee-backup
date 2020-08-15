@@ -1,8 +1,6 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lendee.Core.DataAccess
@@ -15,39 +13,17 @@ namespace Lendee.Core.DataAccess
         {
             this.context = context;
         }
-
-        public Payment Add(Payment payment)
-        {
-            var entity = context
-                .Set<Payment>()
-                .Add(payment);
-            return entity.Entity;
-        }
-
-        public ValueTask<Payment> Find(long id)
-        {
-            return context.Set<Payment>()
-                .FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Payment>> GetLast(int take, int skip)
-        {
-            return await context
-                .Set<Payment>()
-                .OrderByDescending(x => x.PaidAt)
-                .Skip(skip)
-                .Take(take)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Payment>> List(long contractId)
-        {
-            return await context.Set<Payment>().Where(x => x.ContractId == contractId).OrderByDescending(x => x.PaidAt).ToListAsync();
-        }
-
         public Task Save()
         {
             return context.SaveChangesAsync();
+        }
+
+        public void SaveNewPayments(IEnumerable<Payment> payments, long contractId)
+        {
+            foreach (var payment in payments)
+            {
+                context.Set<Payment>().Add(payment);
+            }
         }
     }
 }

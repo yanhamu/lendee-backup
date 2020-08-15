@@ -16,6 +16,8 @@
     <None Remove="Scripts\0008_alter_table_contracts_credit.sql" />
     <None Remove="Scripts\0009_alter_table_contracts_terms.sql" />
     <None Remove="Scripts\0010_create_table_payments.sql" />
+    <None Remove="Scripts\0011_rename_table_repayments.sql" />
+    <None Remove="Scripts\0012_create_table_payments.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +40,8 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Scripts\0004_create_schema.sql" />
+    <EmbeddedResource Include="Scripts\0012_create_table_payments.sql" />
+    <EmbeddedResource Include="Scripts\0011_rename_table_repayments.sql" />
     <EmbeddedResource Include="Scripts\0010_create_table_payments.sql" />
     <EmbeddedResource Include="Scripts\0009_alter_table_contracts_terms.sql" />
     <EmbeddedResource Include="Scripts\0008_alter_table_contracts_credit.sql" />

@@ -6,10 +6,7 @@ namespace Lendee.Core.Domain.Interfaces
 {
     public interface IPaymentRepository
     {
-        Task<IEnumerable<Payment>> GetLast(int take, int skip);
-        Payment Add(Payment payment);
+        void SaveNewPayments(IEnumerable<Payment> payments, long contractId);
         Task Save();
-        ValueTask<Payment> Find(long id);
-        Task<IEnumerable<Payment>> List(long contractId);
     }
 }

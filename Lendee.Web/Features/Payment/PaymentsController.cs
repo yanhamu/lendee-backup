@@ -7,9 +7,9 @@ namespace Lendee.Web.Features.Payment
 {
     public class PaymentsController : Controller
     {
-        private readonly IPaymentRepository repository;
+        private readonly IRepaymentRepository repository;
 
-        public PaymentsController(IPaymentRepository repository)
+        public PaymentsController(IRepaymentRepository repository)
         {
             this.repository = repository;
         }
@@ -30,7 +30,7 @@ namespace Lendee.Web.Features.Payment
         [HttpPost]
         public async Task<IActionResult> Create(PaymentViewModel model)
         {
-            var payment = new Core.Domain.Model.Payment()
+            var payment = new Core.Domain.Model.Repayment()
             {
                 Amount = model.Amount,
                 ContractId = model.ContractId,
@@ -52,7 +52,6 @@ namespace Lendee.Web.Features.Payment
                 Amount = payment.Amount,
                 ContractId = payment.ContractId,
                 PaidAt = payment.PaidAt
-
             });
         }
 

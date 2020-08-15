@@ -8,7 +8,6 @@ namespace Lendee.Core.Domain.Repayment
         public IEnumerable<Repayment> Build(Input input)
         {
             var date = input.From.Date;
-            var payments = new List<Repayment>();
             while (date < DateTime.Now.Date)
             {
                 var startDate = new DateTime(date.Year, date.Month, date.Day);

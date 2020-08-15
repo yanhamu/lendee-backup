@@ -59,11 +59,19 @@ namespace Lendee.Core.DataAccess
             credit.Property(x => x.InterestRate).HasColumnName("interest_rate");
             credit.Property(x => x.PrincipalSum).HasColumnName("principal_sum");
 
+            var repayment = modelBuilder.Entity<Repayment>();
+            repayment.ToTable("repayments");
+            repayment.HasKey(x => x.Id);
+            repayment.Property(x => x.Amount).HasColumnName("amount");
+            repayment.Property(x => x.PaidAt).HasColumnName("paid_at");
+            repayment.Property(x => x.ContractId).HasColumnName("contract_id");
+            repayment.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);
+
             var payment = modelBuilder.Entity<Payment>();
             payment.ToTable("payments");
             payment.HasKey(x => x.Id);
             payment.Property(x => x.Amount).HasColumnName("amount");
-            payment.Property(x => x.PaidAt).HasColumnName("paid_at");
+            payment.Property(x => x.DueDate).HasColumnName("due");
             payment.Property(x => x.ContractId).HasColumnName("contract_id");
             payment.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);
         }

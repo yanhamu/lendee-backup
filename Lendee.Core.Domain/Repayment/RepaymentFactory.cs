@@ -8,9 +8,9 @@ namespace Lendee.Core.Domain.Repayment
     public class RepaymentFactory
     {
         private readonly IContractRepository contractRepository;
-        private readonly IPaymentRepository paymentRepository;
+        private readonly IRepaymentRepository paymentRepository;
 
-        public RepaymentFactory(IContractRepository contractRepository, IPaymentRepository paymentRepository)
+        public RepaymentFactory(IContractRepository contractRepository, IRepaymentRepository paymentRepository)
         {
             this.contractRepository = contractRepository;
             this.paymentRepository = paymentRepository;

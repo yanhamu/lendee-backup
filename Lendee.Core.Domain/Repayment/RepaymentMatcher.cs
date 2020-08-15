@@ -6,7 +6,7 @@ namespace Lendee.Core.Domain.Repayment
 {
     public class RepaymentMatcher
     {
-        public IEnumerable<ActualRepayment> Match(IEnumerable<Payment> payments, IEnumerable<Repayment> repayments)
+        public IEnumerable<ActualRepayment> Match(IEnumerable<Model.Repayment> payments, IEnumerable<Repayment> repayments)
         {
             var repaymentsEnumerator = repayments.GetEnumerator();
             var paymentsEnumerator = payments.OrderBy(x => x.PaidAt).GetEnumerator();
@@ -21,8 +21,8 @@ namespace Lendee.Core.Domain.Repayment
     public class ActualRepayment : Repayment
     {
         public decimal Paid { get => Payments.Sum(p => p.Amount); }
-        public Payment[] Payments { get; set; }
-        public ActualRepayment(Repayment repayment, Payment[] payments) : base(repayment.Interval, repayment.ToPay)
+        public Model.Repayment[] Payments { get; set; }
+        public ActualRepayment(Repayment repayment, Model.Repayment[] payments) : base(repayment.Interval, repayment.ToPay)
         {
             this.ToPay = repayment.ToPay;
             this.Interval = repayment.Interval;
