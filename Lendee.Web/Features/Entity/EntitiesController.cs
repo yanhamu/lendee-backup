@@ -24,20 +24,23 @@ namespace Lendee.Web.Features.Entity
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(string returnUrl)
         {
+            ViewData["returnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(EntityViewModel model)
+        public async Task<ActionResult> Create(EntityViewModel model, string returnUrl)
         {
             var entity = legalEntityFactory.Create(model);
 
             var saved = repository.Add(entity);
             await repository.Save();
 
-            return RedirectToAction(nameof(List));
+            if (string.IsNullOrWhiteSpace(returnUrl))
+                return RedirectToAction(nameof(List));
+            return Redirect(returnUrl);
         }
 
         [HttpGet]
@@ -80,27 +83,28 @@ namespace Lendee.Web.Features.Entity
 
             return RedirectToAction(nameof(List));
         }
+
+        public class EntityViewModel
+        {
+            public long Id { get; set; }
+            public string Email { get; set; }
+            public string PhoneNumber { get; set; }
+            public string BankAccountNumber { get; set; }
+            public string Note { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string CompanyName { get; set; }
+
+            /// <summary>
+            /// ICO
+            /// </summary>
+            public string IdentifyingNumber { get; set; }
+
+            /// <summary>
+            /// DIC
+            /// </summary>
+            public string TaxIdentifyingNumber { get; set; }
+        }
     }
 
-    public class EntityViewModel
-    {
-        public long Id { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public string BankAccountNumber { get; set; }
-        public string Note { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string CompanyName { get; set; }
-
-        /// <summary>
-        /// ICO
-        /// </summary>
-        public string IdentifyingNumber { get; set; }
-
-        /// <summary>
-        /// DIC
-        /// </summary>
-        public string TaxIdentifyingNumber { get; set; }
-    }
 }

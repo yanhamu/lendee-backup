@@ -42,8 +42,8 @@ namespace Lendee.Web.Features.Contract
             var contract = await contractRepository.Find(id);
             switch (contract.Type)
             {
-                case ContractType.Draft:
-                    break;
+                //case ContractType.Draft:
+                //    break;
                 case ContractType.Credit:
                     break;
                 case ContractType.Loan:

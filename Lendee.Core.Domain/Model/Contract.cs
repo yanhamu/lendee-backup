@@ -42,8 +42,6 @@ namespace Lendee.Core.Domain.Model
         public int? Month { get; set; }
     }
 
-    public class Rent : Contract { }
-
     public class Credit : Contract
     {
 
@@ -63,7 +61,7 @@ namespace Lendee.Core.Domain.Model
 
     public enum ContractType : int
     {
-        Draft = 0,
+        Undefined = 0,
         Credit = 1, // uver
         Loan = 2, // pujcka
         Rent = 3, // najem

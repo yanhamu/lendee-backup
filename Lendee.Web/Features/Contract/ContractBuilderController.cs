@@ -2,7 +2,6 @@
 using Lendee.Core.Domain.Model;
 using Lendee.Core.Domain.Payments;
 using Lendee.Web.Features.Common;
-using Lendee.Web.Features.Entity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,19 +17,22 @@ namespace Lendee.Web.Features.Contract
         private readonly LegalEntityFactory legalEntityFactory;
         private readonly PaymentFactory paymentFactory;
         private readonly IPaymentRepository paymentsRepository;
+        private readonly IContractDraftRepository draftRepository;
 
         public ContractBuilderController(
             IEntityRepository entityRepository,
             IContractRepository contractRepository,
             IPaymentRepository paymentsRepository,
             LegalEntityFactory legalEntityFactory,
-            PaymentFactory paymentFactory)
+            PaymentFactory paymentFactory,
+            IContractDraftRepository contractDraftRepository)
         {
             this.entityRepository = entityRepository;
             this.contractRepository = contractRepository;
             this.legalEntityFactory = legalEntityFactory;
             this.paymentFactory = paymentFactory;
             this.paymentsRepository = paymentsRepository;
+            this.draftRepository = contractDraftRepository;
         }
 
         [HttpGet]
@@ -52,97 +54,81 @@ namespace Lendee.Web.Features.Contract
 
             var saved = contractRepository.Add(toSave);
             await contractRepository.Save();
+            draftRepository.Add(new ContractDraft() { ContractId = saved.Id, Step = 1 });
+            await draftRepository.Save();
+            return RedirectToAction("Step", new { contractId = saved.Id });
+        }
 
-            return RedirectToAction("SetLendee", new { contractId = saved.Id });
+        [HttpGet]
+        public async Task<IActionResult> Step(long contractId)
+        {
+            var draft = await draftRepository.Find(contractId);
+            var contract = await contractRepository.Find(contractId);
+
+            if (draft.Step == 1 && contract.Type == ContractType.Rent)
+                return RedirectToAction(nameof(Rent), new { contractId });
+
+            if (draft.Step == 2)
+                return RedirectToAction(nameof(SetLendee), new { contractId });
+            if (draft.Step == 3)
+                return RedirectToAction(nameof(SetLender), new { contractId });
+
+            if (draft.Step == 4)
+                return RedirectToAction(nameof(Payments), new { contractId });
+
+            return RedirectToAction("List", "Contracts");
         }
 
         [HttpGet]
         public async Task<IActionResult> SetLendee(long contractId)
         {
-            ViewData["contractId"] = contractId;
-
             var contract = await contractRepository.Find(contractId);
-            if (contract.LendeeId.HasValue)
-            {
-                var lendee = await entityRepository.Find(contract.LendeeId.Value);
-                var model = legalEntityFactory.Create(lendee);
-                return View(model);
-            }
-
-            return View();
+            var entities = await entityRepository.List();
+            return View(new ContractEntityViewModel() { Entities = entities, Selected = contract.LendeeId, ContractId = contractId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetLendee(long contractId, EntityViewModel model)
+        public async Task<IActionResult> SetLendee(long contractId, ContractEntityViewModel model)
         {
-            var entity = legalEntityFactory.Create(model);
-            var saved = entityRepository.Add(entity);
-            await entityRepository.Save();
-
             var contract = await contractRepository.Find(contractId);
-            contract.LendeeId = saved.Id;
+            contract.LendeeId = model.Selected;
             await contractRepository.Save();
 
-            return RedirectToAction("SetLender", new { contractId });
+            return await IncreaseDraftStepAndRedirect(contractId);
         }
 
         [HttpGet]
         public async Task<IActionResult> SetLender(long contractId)
         {
-            ViewData["contractId"] = contractId;
-
             var contract = await contractRepository.Find(contractId);
-            if (contract.LenderId.HasValue)
-            {
-                var lender = await entityRepository.Find(contract.LenderId.Value);
-                var model = legalEntityFactory.Create(lender);
-                return View(model);
-            }
-
-            return View();
+            var entities = await entityRepository.List();
+            return View(new ContractEntityViewModel() { Entities = entities, Selected = contract.LenderId, ContractId = contractId });
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetLender(long contractId, EntityViewModel model)
+        public async Task<IActionResult> SetLender(long contractId, ContractEntityViewModel model)
         {
-            ViewData["contractId"] = contractId;
-
-            var entity = legalEntityFactory.Create(model);
-            var saved = entityRepository.Add(entity);
-            await entityRepository.Save();
-
             var contract = await contractRepository.Find(contractId);
-            contract.LenderId = saved.Id;
+            contract.LenderId = model.Selected;
             await contractRepository.Save();
 
-            switch (contract.Type)
-            {
-                case ContractType.Credit:
-                    return RedirectToAction("Credit", new { contractId });
-                case ContractType.Loan:
-                    break;
-                case ContractType.Rent:
-                    return RedirectToAction("Rent", new { contractId });
-                default:
-                    throw new ArgumentException();
-            }
-
-            return RedirectToAction("SetLender", new { contractId });
+            return await IncreaseDraftStepAndRedirect(contractId);
         }
 
         [HttpGet]
         public async Task<IActionResult> Rent(long contractId)
         {
-            var contract = await contractRepository.FindRent(contractId);
+            var rent = await contractRepository.FindRent(contractId);
             return View(new RentViewModel()
             {
-                ContractId = contract.Id,
-                PaymentTermType = contract.PaymentTermType,
-                PaymentAmount = contract.PaymentAmount,
-                ValidUntil = contract.ValidUntil,
+                ContractId = rent.Id,
+                PaymentTermType = rent.PaymentTermType,
+                RentType = rent.RentType,
+                PaymentAmount = rent.PaymentAmount,
+                ValidUntil = rent.ValidUntil,
                 ValidFrom = DateTime.Now,
-                Day = contract.PaymentTermData?.Day,
-                Month = contract.PaymentTermData?.Month
+                Day = rent.PaymentTermData?.Day,
+                Month = rent.PaymentTermData?.Month
             });
         }
 
@@ -151,6 +137,7 @@ namespace Lendee.Web.Features.Contract
         {
             var rent = await contractRepository.FindRent(model.ContractId);
             rent.PaymentTermType = model.PaymentTermType;
+            rent.RentType = model.RentType;
             rent.PaymentAmount = model.PaymentAmount;
             rent.ValidFrom = model.ValidFrom;
             rent.ValidUntil = model.ValidUntil;
@@ -161,7 +148,7 @@ namespace Lendee.Web.Features.Contract
             };
 
             await contractRepository.Save();
-            return RedirectToAction("Payments", new { contracitId = model.ContractId });
+            return await IncreaseDraftStepAndRedirect(model.ContractId);
         }
 
         [HttpGet]
@@ -178,7 +165,7 @@ namespace Lendee.Web.Features.Contract
             var toSave = model.Payments.Select(x => new Lendee.Core.Domain.Model.Payment() { Amount = x.Amount, ContractId = model.ContractId, DueDate = x.DueDate });
             paymentsRepository.SaveNewPayments(toSave, model.ContractId);
             await paymentsRepository.Save();
-            return RedirectToAction("List", "Contracts");
+            return await IncreaseDraftStepAndRedirect(model.ContractId);
         }
 
         [HttpGet]
@@ -214,10 +201,25 @@ namespace Lendee.Web.Features.Contract
             return RedirectToAction("List", "Contracts");
         }
 
+        private async Task<IActionResult> IncreaseDraftStepAndRedirect(long contractId)
+        {
+            var draft = await draftRepository.Find(contractId);
+            draft.Step += 1;
+            await draftRepository.Save();
+            return RedirectToAction("Step", new { contractId = contractId });
+        }
+
         public class PaymentsViewModel
         {
             public List<Core.Domain.Model.Payment> Payments { get; set; }
             public long ContractId { get; set; }
+        }
+
+        public class ContractEntityViewModel
+        {
+            public long ContractId { get; set; }
+            public IEnumerable<LegalEntity> Entities { get; set; }
+            public long? Selected { get; set; }
         }
     }
 
@@ -236,10 +238,12 @@ namespace Lendee.Web.Features.Contract
     {
         public long ContractId { get; set; }
         public decimal? PaymentAmount { get; set; }
+        public decimal? Fee { get; set; }
+        public decimal? NormalizedFee { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
         public PaymentTermType PaymentTermType { get; set; }
-
+        public RentType RentType { get; set; }
         public int? Day { get; set; }
         public int? Month { get; set; }
     }

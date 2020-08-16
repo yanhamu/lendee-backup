@@ -5,7 +5,7 @@ namespace Lendee.Web.Features.Common
 {
     public class LegalEntityFactory
     {
-        public LegalEntity Create(EntityViewModel model)
+        public LegalEntity Create(EntitiesController.EntityViewModel model)
         {
             return new LegalEntity
             {
@@ -21,9 +21,9 @@ namespace Lendee.Web.Features.Common
             };
         }
 
-        public EntityViewModel Create(LegalEntity entity)
+        public EntitiesController.EntityViewModel Create(LegalEntity entity)
         {
-            return new EntityViewModel
+            return new EntitiesController.EntityViewModel
             {
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,

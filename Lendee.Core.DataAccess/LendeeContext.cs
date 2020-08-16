@@ -38,7 +38,7 @@ namespace Lendee.Core.DataAccess
             contract.HasOne(x => x.Lendee).WithMany().HasForeignKey(x => x.LendeeId).IsRequired(false);
             contract.HasOne(x => x.Lender).WithMany().HasForeignKey(x => x.LenderId).IsRequired(false);
             contract.HasDiscriminator(x => x.Type)
-                .HasValue<Contract>(ContractType.Draft)
+                .HasValue<Contract>(ContractType.Undefined)
                 .HasValue<Rent>(ContractType.Rent)
                 .HasValue<Credit>(ContractType.Credit);
             contract.OwnsOne(
@@ -52,6 +52,7 @@ namespace Lendee.Core.DataAccess
             var rent = modelBuilder.Entity<Rent>();
             rent.Property(x => x.ValidFrom).HasColumnName("valid_from");
             rent.Property(x => x.ValidUntil).HasColumnName("valid_until");
+            rent.Property(x => x.RentType).HasColumnName("rent_type").IsRequired();
 
             var credit = modelBuilder.Entity<Credit>();
             credit.Property(x => x.ValidFrom).HasColumnName("valid_from");
@@ -74,6 +75,14 @@ namespace Lendee.Core.DataAccess
             payment.Property(x => x.DueDate).HasColumnName("due");
             payment.Property(x => x.ContractId).HasColumnName("contract_id");
             payment.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);
+
+            var contractDraft = modelBuilder.Entity<ContractDraft>();
+            contractDraft.ToTable("contract_drafts");
+            contractDraft.HasKey(x => x.ContractId);
+            contractDraft.Property(x => x.ContractId).HasColumnName("contract_id");
+            contractDraft.Property(x => x.Step).HasColumnName("step");
+            contractDraft.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);
+
         }
     }
 }
