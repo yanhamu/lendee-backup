@@ -4,7 +4,6 @@ namespace Lendee.Core.Domain.Model
 {
     public class PaymentSettings
     {
-        public decimal PaymentAmount { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
         public PaymentTermType PaymentTermType { get; set; }

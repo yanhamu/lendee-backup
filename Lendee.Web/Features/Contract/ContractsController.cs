@@ -17,8 +17,8 @@ namespace Lendee.Web.Features.Contract
         private readonly RepaymentFactory repaymentFactory;
 
         public ContractsController(
-            IContractRepository contractRepository, 
-            IEntityRepository entityRepository, 
+            IContractRepository contractRepository,
+            IEntityRepository entityRepository,
             IRepaymentRepository paymentRepository,
             RepaymentFactory repaymentFactory)
         {
@@ -48,8 +48,10 @@ namespace Lendee.Web.Features.Contract
                     break;
                 case ContractType.Loan:
                     break;
-                case ContractType.Rent:
+                case ContractType.CombinedRent:
                     return RedirectToAction(nameof(DetailRent), new { id = id });
+                case ContractType.VariableRent:
+                    return RedirectToAction(nameof(VariableRent), new { id = id });
                 default:
                     break;
             }
@@ -57,6 +59,7 @@ namespace Lendee.Web.Features.Contract
             throw new ArgumentException();
         }
 
+        [HttpGet]
         public async Task<IActionResult> DetailRent(long id)
         {
             var rent = await contractRepository.FindRent(id);
@@ -67,7 +70,20 @@ namespace Lendee.Web.Features.Contract
             var model = new RentDetailViewModel(rent, lender, lendee, payments, repayments);
             return View(model);
         }
-        public class RentDetailViewModel
+
+        [HttpGet]
+        public async Task<IActionResult> VariableRent(long id)
+        {
+            var rent = await contractRepository.FindVariableRent(id);
+            var lender = await entityRepository.Find(rent.LenderId.Value);
+            var lendee = await entityRepository.Find(rent.LendeeId.Value);
+            var payments = await paymentRepository.List(rent.Id);
+            var repayments = await repaymentFactory.Calculate(id);
+            var model = new VariableRentDetailViewModel(rent, lender, lendee, payments, repayments);
+            return View(model);
+        }
+
+        public abstract class BaseRentDetailViewModel
         {
             public long ContractId { get; }
             public string Name { get; set; }
@@ -80,9 +96,19 @@ namespace Lendee.Web.Features.Contract
             public IEnumerable<PaymentViewModel> Payments { get; }
             public IEnumerable<ActualRepayment> Repayments { get; }
 
-            public RentDetailViewModel(Rent rent, LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Repayment> payments, IEnumerable<ActualRepayment> repayments)
+            public BaseRentDetailViewModel(LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Repayment> payments, IEnumerable<ActualRepayment> repayments)
             {
-                this.ContractId = rent.Id;
+                this.Lender = new EntityViewModel(lender);
+                this.Lendee = new EntityViewModel(lendee);
+                this.Payments = payments.Select(x => new PaymentViewModel(x));
+                this.Repayments = repayments.Select(x => x);
+            }
+        }
+
+        public class RentDetailViewModel : BaseRentDetailViewModel
+        {
+            public RentDetailViewModel(CombinedRent rent, LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Repayment> payments, IEnumerable<ActualRepayment> repayments) : base(lender, lendee, payments, repayments)
+            {
                 this.Name = rent.Name;
                 this.Currency = rent.Currency;
                 this.Note = rent.Note;
@@ -90,8 +116,20 @@ namespace Lendee.Web.Features.Contract
                 this.ValidUntil = rent.ValidUntil;
                 this.Lender = new EntityViewModel(lender);
                 this.Lendee = new EntityViewModel(lendee);
-                this.Payments = payments.Select(x => new PaymentViewModel(x));
-                this.Repayments = repayments.Select(x => x);
+            }
+        }
+
+        public class VariableRentDetailViewModel : BaseRentDetailViewModel
+        {
+            public VariableRentDetailViewModel(VariableRent rent, LegalEntity lender, LegalEntity lendee, IEnumerable<Core.Domain.Model.Repayment> payments, IEnumerable<ActualRepayment> repayments) : base(lender, lendee, payments, repayments)
+            {
+                this.Name = rent.Name;
+                this.Currency = rent.Currency;
+                this.Note = rent.Note;
+                this.ValidFrom = rent.ValidFrom;
+                this.ValidUntil = rent.ValidUntil;
+                this.Lender = new EntityViewModel(lender);
+                this.Lendee = new EntityViewModel(lendee);
             }
         }
 

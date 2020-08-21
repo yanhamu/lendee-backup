@@ -1,11 +1,9 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
-using Lendee.Core.Domain.Payments;
 using Lendee.Web.Features.Common;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lendee.Web.Features.Contract
@@ -15,7 +13,6 @@ namespace Lendee.Web.Features.Contract
         private readonly IEntityRepository entityRepository;
         private readonly IContractRepository contractRepository;
         private readonly LegalEntityFactory legalEntityFactory;
-        private readonly PaymentFactory paymentFactory;
         private readonly IPaymentRepository paymentsRepository;
         private readonly IContractDraftRepository draftRepository;
 
@@ -24,13 +21,11 @@ namespace Lendee.Web.Features.Contract
             IContractRepository contractRepository,
             IPaymentRepository paymentsRepository,
             LegalEntityFactory legalEntityFactory,
-            PaymentFactory paymentFactory,
             IContractDraftRepository contractDraftRepository)
         {
             this.entityRepository = entityRepository;
             this.contractRepository = contractRepository;
             this.legalEntityFactory = legalEntityFactory;
-            this.paymentFactory = paymentFactory;
             this.paymentsRepository = paymentsRepository;
             this.draftRepository = contractDraftRepository;
         }
@@ -65,16 +60,21 @@ namespace Lendee.Web.Features.Contract
             var draft = await draftRepository.Find(contractId);
             var contract = await contractRepository.Find(contractId);
 
+            if (draft.Step == 1 && contract.Type == ContractType.CombinedRent)
+                return RedirectToAction(nameof(RentBuilderController.CombinedRent), nameof(RentBuilderController).Replace("Controller",""), new { contractId });
+            if (draft.Step == 1 && contract.Type == ContractType.VariableRent)
+                return RedirectToAction(nameof(RentBuilderController.VariableRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
             if (draft.Step == 1 && contract.Type == ContractType.Rent)
-                return RedirectToAction(nameof(Rent), new { contractId });
+                return RedirectToAction(nameof(RentBuilderController.Rent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
 
             if (draft.Step == 2)
                 return RedirectToAction(nameof(SetLendee), new { contractId });
+
             if (draft.Step == 3)
                 return RedirectToAction(nameof(SetLender), new { contractId });
 
             if (draft.Step == 4)
-                return RedirectToAction(nameof(Payments), new { contractId });
+                return RedirectToAction(nameof(Repayments), new { contractId });
 
             return RedirectToAction("List", "Contracts");
         }
@@ -115,57 +115,9 @@ namespace Lendee.Web.Features.Contract
             return await IncreaseDraftStepAndRedirect(contractId);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Rent(long contractId)
+        public async Task<IActionResult> Repayments(long contractId)
         {
-            var rent = await contractRepository.FindRent(contractId);
-            return View(new RentViewModel()
-            {
-                ContractId = rent.Id,
-                PaymentTermType = rent.PaymentTermType,
-                RentType = rent.RentType,
-                PaymentAmount = rent.PaymentAmount,
-                ValidUntil = rent.ValidUntil,
-                ValidFrom = DateTime.Now,
-                Day = rent.PaymentTermData?.Day,
-                Month = rent.PaymentTermData?.Month
-            });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Rent(RentViewModel model)
-        {
-            var rent = await contractRepository.FindRent(model.ContractId);
-            rent.PaymentTermType = model.PaymentTermType;
-            rent.RentType = model.RentType;
-            rent.PaymentAmount = model.PaymentAmount;
-            rent.ValidFrom = model.ValidFrom;
-            rent.ValidUntil = model.ValidUntil;
-            rent.PaymentTermData = new PaymentTerm()
-            {
-                Day = model.Day,
-                Month = model.Month
-            };
-
-            await contractRepository.Save();
-            return await IncreaseDraftStepAndRedirect(model.ContractId);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Payments(long contractId)
-        {
-            var contract = await contractRepository.Find(contractId);
-            var payments = paymentFactory.BuildPayments(contractId, contract.PaymentSettings);
-            return View(new PaymentsViewModel() { ContractId = contractId, Payments = payments.ToList() });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Payments(PaymentsViewModel model)
-        {
-            var toSave = model.Payments.Select(x => new Lendee.Core.Domain.Model.Payment() { Amount = x.Amount, ContractId = model.ContractId, DueDate = x.DueDate });
-            paymentsRepository.SaveNewPayments(toSave, model.ContractId);
-            await paymentsRepository.Save();
-            return await IncreaseDraftStepAndRedirect(model.ContractId);
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -206,7 +158,7 @@ namespace Lendee.Web.Features.Contract
             var draft = await draftRepository.Find(contractId);
             draft.Step += 1;
             await draftRepository.Save();
-            return RedirectToAction("Step", new { contractId = contractId });
+            return RedirectToAction(nameof(ContractBuilderController.Step), new { contractId = contractId });
         }
 
         public class PaymentsViewModel
@@ -232,20 +184,6 @@ namespace Lendee.Web.Features.Contract
         public long? LenderId { get; set; }
         public long? LendeeId { get; set; }
         public string Note { get; set; }
-    }
-
-    public class RentViewModel
-    {
-        public long ContractId { get; set; }
-        public decimal? PaymentAmount { get; set; }
-        public decimal? Fee { get; set; }
-        public decimal? NormalizedFee { get; set; }
-        public DateTime ValidFrom { get; set; }
-        public DateTime? ValidUntil { get; set; }
-        public PaymentTermType PaymentTermType { get; set; }
-        public RentType RentType { get; set; }
-        public int? Day { get; set; }
-        public int? Month { get; set; }
     }
 
     public class CreditViewModel

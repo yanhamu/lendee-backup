@@ -31,9 +31,19 @@ namespace Lendee.Core.DataAccess
             return context.Set<Credit>().FindAsync(contractId);
         }
 
-        public ValueTask<Rent> FindRent(long contractId)
+        public ValueTask<CombinedRent> FindRent(long contractId)
         {
-            return context.Set<Rent>().FindAsync(contractId);
+            return context.Set<CombinedRent>().FindAsync(contractId);
+        }
+
+        public ValueTask<CombinedRent> FindCombinedRent(long contractId)
+        {
+            return context.Set<CombinedRent>().FindAsync(contractId);
+        }
+
+        public ValueTask<VariableRent> FindVariableRent(long contractId)
+        {
+            return context.Set<VariableRent>().FindAsync(contractId);
         }
 
         public async Task<IEnumerable<Contract>> GetAll()

@@ -15,7 +15,6 @@ namespace Lendee.Core.Domain.Model
         public string Note { get; set; }
         public PaymentTermType PaymentTermType { get; set; }
         public PaymentTerm PaymentTermData { get; set; }
-        public decimal? PaymentAmount { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
         public PaymentSettings PaymentSettings
@@ -26,7 +25,6 @@ namespace Lendee.Core.Domain.Model
                 {
                     Day = PaymentTermData.Day.Value,
                     Month = PaymentTermData.Month,
-                    PaymentAmount = PaymentAmount.Value,
                     PaymentTermType = PaymentTermType,
                     ValidFrom = ValidFrom,
                     ValidUntil = ValidUntil
@@ -64,8 +62,9 @@ namespace Lendee.Core.Domain.Model
         Undefined = 0,
         Credit = 1, // uver
         Loan = 2, // pujcka
-        Rent = 3, // najem
-                  // MISSING postoupeni
+        CombinedRent = 3, // najem + zalohy
+        VariableRent = 4, // najem za jednotkovou cenu
+        Rent = 5 // jenom najem (bez energii)
     }
 
     public enum Currency

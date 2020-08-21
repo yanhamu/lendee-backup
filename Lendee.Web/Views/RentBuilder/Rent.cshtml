@@ -1,0 +1,96 @@
+﻿@model Lendee.Web.Features.Contract.RentBuilderController.RentViewModel
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = "Rent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    string GetAction(Lendee.Core.Domain.Model.ContractType contractType)
+    {
+        switch (contractType)
+        {
+            case Lendee.Core.Domain.Model.ContractType.Undefined: throw new ArgumentException("invalid contract type");
+            case Lendee.Core.Domain.Model.ContractType.Credit: throw new ArgumentException("invalid contract type");
+            case Lendee.Core.Domain.Model.ContractType.Loan: throw new ArgumentException("invalid contract type");
+            case Lendee.Core.Domain.Model.ContractType.CombinedRent:
+                return "CombinedRent";
+            case Lendee.Core.Domain.Model.ContractType.VariableRent:
+                return "VariableRent";
+            case Lendee.Core.Domain.Model.ContractType.Rent:
+                return "Rent";
+            default: throw new ArgumentException("invalid contract type");
+        }
+    }
+}
+
+<h1>Rent</h1>
+
+<form method="post" asp-action="@GetAction(@Model.ContractType)" asp-route-contractId="@Model.ContractId">
+
+    <input type="hidden" asp-for="ContractId" />
+    <input type="hidden" asp-for="ContractType" />
+
+    <div class="form-group row">
+        <label asp-for="ValidFrom" class="col-sm-2 col-form-label">Platnost od:</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="ValidFrom" type="date" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label asp-for="ValidUntil" class="col-sm-2 col-form-label">Platnost do:</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="ValidUntil" type="date" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">@Localizer["Payment Term"]</label>
+        <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
+            <label class="btn btn-secondary @(Model.PaymentTermType == Lendee.Core.Domain.Model.PaymentTermType.Monthly ? "active" : "")">
+                <input type="radio" autocomplete="off" asp-for="PaymentTermType" value="@Lendee.Core.Domain.Model.PaymentTermType.Monthly"> Monthly
+            </label>
+            <label class="btn btn-secondary @(Model.PaymentTermType == Lendee.Core.Domain.Model.PaymentTermType.Custom ? "active" : "")">
+                <input type="radio" autocomplete="off" asp-for="PaymentTermType" value="@Lendee.Core.Domain.Model.PaymentTermType.Custom"> Custom
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group row .d-none paymentAmount rent">
+        @if (Model.ContractType == Lendee.Core.Domain.Model.ContractType.VariableRent)
+        {
+            <label asp-for="PaymentAmount" class="col-sm-2 col-form-label">Unit Price:</label>
+        }
+        else
+        {
+            <label asp-for="PaymentAmount" class="col-sm-2 col-form-label">Rent Amount:</label>
+        }
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="PaymentAmount" type="number" />
+        </div>
+    </div>
+
+    @if (Model.ContractType == Lendee.Core.Domain.Model.ContractType.CombinedRent)
+    {
+        <div class="form-group row .d-none paymentAmount fee">
+            <label asp-for="Fee" class="col-sm-2 col-form-label">Fees:</label>
+            <div class="col-sm-10">
+                <input class="form-control" asp-for="Fee" type="number" />
+            </div>
+        </div>
+    }
+
+    <div class="form-group row">
+        <label asp-for="Day" class="col-sm-2 col-form-label">Splatnost do dne:</label>
+        <div class="col-sm-10">
+            <input class="form-control" asp-for="Day" type="number" min="1" max="28" step="1" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+            <button type="submit" class="btn btn-primary form-control">Uložit</button>
+        </div>
+    </div>
+</form>

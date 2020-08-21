@@ -34,11 +34,14 @@ namespace Lendee.Core.DataAccess
             contract.Property(x => x.LendeeId).HasColumnName("lendee");
             contract.Property(x => x.Note).HasColumnName("note");
             contract.Property(x => x.PaymentTermType).HasColumnName("payment_term_type");
-            contract.Property(x => x.PaymentAmount).HasColumnName("payment_amount");
+            contract.Property(x => x.ValidFrom).HasColumnName("valid_from");
+            contract.Property(x => x.ValidUntil).HasColumnName("valid_until");
             contract.HasOne(x => x.Lendee).WithMany().HasForeignKey(x => x.LendeeId).IsRequired(false);
             contract.HasOne(x => x.Lender).WithMany().HasForeignKey(x => x.LenderId).IsRequired(false);
             contract.HasDiscriminator(x => x.Type)
                 .HasValue<Contract>(ContractType.Undefined)
+                .HasValue<CombinedRent>(ContractType.CombinedRent)
+                .HasValue<VariableRent>(ContractType.VariableRent)
                 .HasValue<Rent>(ContractType.Rent)
                 .HasValue<Credit>(ContractType.Credit);
             contract.OwnsOne(
@@ -49,14 +52,17 @@ namespace Lendee.Core.DataAccess
                     p.Property(d => d.Month).HasColumnName("term_month");
                 });
 
+            var combinedRent = modelBuilder.Entity<CombinedRent>();
+            combinedRent.Property(x => x.Amount).HasColumnName("payment_amount").IsRequired();
+            combinedRent.Property(x => x.Fee).HasColumnName("fee").IsRequired();
+
+            var variableRent = modelBuilder.Entity<VariableRent>();
+            variableRent.Property(x => x.UnitPrice).HasColumnName("payment_amount").IsRequired();
+
             var rent = modelBuilder.Entity<Rent>();
-            rent.Property(x => x.ValidFrom).HasColumnName("valid_from");
-            rent.Property(x => x.ValidUntil).HasColumnName("valid_until");
-            rent.Property(x => x.RentType).HasColumnName("rent_type").IsRequired();
+            rent.Property(x => x.Amount).HasColumnName("payment_amount").IsRequired();
 
             var credit = modelBuilder.Entity<Credit>();
-            credit.Property(x => x.ValidFrom).HasColumnName("valid_from");
-            credit.Property(x => x.ValidUntil).HasColumnName("valid_until");
             credit.Property(x => x.InterestRate).HasColumnName("interest_rate");
             credit.Property(x => x.PrincipalSum).HasColumnName("principal_sum");
 

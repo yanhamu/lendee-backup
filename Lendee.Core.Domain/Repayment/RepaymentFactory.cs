@@ -31,7 +31,7 @@ namespace Lendee.Core.Domain.Repayment
                 case Model.PaymentTermType.NotSet:
                     throw new NotImplementedException();
                 case Model.PaymentTermType.Monthly:
-                    return new MonthlyRepaymentCalculator().Build(new Input() { Amount = contract.PaymentAmount.Value, PaymentDay = contract.PaymentTermData.Day.Value, From = contract.ValidFrom });
+                    //return new MonthlyRepaymentCalculator().Build(new Input() { Amount = contract.PaymentAmount.Value, PaymentDay = contract.PaymentTermData.Day.Value, From = contract.ValidFrom });
                 case Model.PaymentTermType.Quaterly:
                     break;
                 case Model.PaymentTermType.HalfYear:

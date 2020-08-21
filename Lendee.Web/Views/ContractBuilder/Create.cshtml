@@ -15,17 +15,23 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">@Localizer["Contract type"]</label>
+        <label class="col-sm-2 col-form-label">Contract type</label>
         <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
             <label class="btn btn-secondary">
+                <input type="radio" autocomplete="off" asp-for="Type" value="@Lendee.Core.Domain.Model.ContractType.CombinedRent"> @Localizer["CombinedRent"]
+            </label>
+            <label class="btn btn-secondary">
                 <input type="radio" autocomplete="off" asp-for="Type" value="@Lendee.Core.Domain.Model.ContractType.Rent"> @Localizer["Rent"]
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" autocomplete="off" asp-for="Type" value="@Lendee.Core.Domain.Model.ContractType.VariableRent"> @Localizer["VariableRent"]
             </label>
             <label class="btn btn-secondary">
                 <input type="radio" autocomplete="off" asp-for="Type" value="@Lendee.Core.Domain.Model.ContractType.Credit"> @Localizer["Credit"]
             </label>
         </div>
     </div>
-
+    
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">@Localizer["Currency"]</label>
         <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
