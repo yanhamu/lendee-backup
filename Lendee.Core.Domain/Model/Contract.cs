@@ -17,20 +17,6 @@ namespace Lendee.Core.Domain.Model
         public PaymentTerm PaymentTermData { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime? ValidUntil { get; set; }
-        public PaymentSettings PaymentSettings
-        {
-            get
-            {
-                return new PaymentSettings()
-                {
-                    Day = PaymentTermData.Day.Value,
-                    Month = PaymentTermData.Month,
-                    PaymentTermType = PaymentTermType,
-                    ValidFrom = ValidFrom,
-                    ValidUntil = ValidUntil
-                };
-            }
-        }
     }
 
 

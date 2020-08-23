@@ -13,20 +13,17 @@ namespace Lendee.Web.Features.Contract
         private readonly IEntityRepository entityRepository;
         private readonly IContractRepository contractRepository;
         private readonly LegalEntityFactory legalEntityFactory;
-        private readonly IPaymentRepository paymentsRepository;
         private readonly IContractDraftRepository draftRepository;
 
         public ContractBuilderController(
             IEntityRepository entityRepository,
             IContractRepository contractRepository,
-            IPaymentRepository paymentsRepository,
             LegalEntityFactory legalEntityFactory,
             IContractDraftRepository contractDraftRepository)
         {
             this.entityRepository = entityRepository;
             this.contractRepository = contractRepository;
             this.legalEntityFactory = legalEntityFactory;
-            this.paymentsRepository = paymentsRepository;
             this.draftRepository = contractDraftRepository;
         }
 
@@ -61,7 +58,7 @@ namespace Lendee.Web.Features.Contract
             var contract = await contractRepository.Find(contractId);
 
             if (draft.Step == 1 && contract.Type == ContractType.CombinedRent)
-                return RedirectToAction(nameof(RentBuilderController.CombinedRent), nameof(RentBuilderController).Replace("Controller",""), new { contractId });
+                return RedirectToAction(nameof(RentBuilderController.CombinedRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
             if (draft.Step == 1 && contract.Type == ContractType.VariableRent)
                 return RedirectToAction(nameof(RentBuilderController.VariableRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
             if (draft.Step == 1 && contract.Type == ContractType.Rent)
@@ -74,7 +71,7 @@ namespace Lendee.Web.Features.Contract
                 return RedirectToAction(nameof(SetLender), new { contractId });
 
             if (draft.Step == 4)
-                return RedirectToAction(nameof(Repayments), new { contractId });
+                return await Repayments(contractId);
 
             return RedirectToAction("List", "Contracts");
         }
@@ -117,7 +114,24 @@ namespace Lendee.Web.Features.Contract
 
         public async Task<IActionResult> Repayments(long contractId)
         {
-            throw new NotImplementedException();
+            var contract = await contractRepository.Find(contractId);
+            switch (contract.Type)
+            {
+                case ContractType.Undefined:
+                    throw new ArgumentException();
+                case ContractType.Credit:
+                    throw new NotImplementedException();
+                case ContractType.Loan:
+                    throw new NotImplementedException();
+                case ContractType.CombinedRent:
+                    return RedirectToAction(nameof(RentBuilderController.CombinedRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
+                case ContractType.VariableRent:
+                    return RedirectToAction(nameof(RentBuilderController.VariableRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
+                case ContractType.Rent:
+                    return RedirectToAction(nameof(RentBuilderController.RentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         [HttpGet]

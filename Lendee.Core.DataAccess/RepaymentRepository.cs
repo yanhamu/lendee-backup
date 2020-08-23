@@ -16,10 +16,10 @@ namespace Lendee.Core.DataAccess
             this.context = context;
         }
 
-        public Repayment Add(Repayment repayment)
+        public Repayment Add<T>(T repayment) where T : Repayment
         {
             var entity = context
-                .Set<Repayment>()
+                .Set<T>()
                 .Add(repayment);
             return entity.Entity;
         }
@@ -34,7 +34,7 @@ namespace Lendee.Core.DataAccess
         {
             return await context
                 .Set<Repayment>()
-                .OrderByDescending(x => x.PaidAt)
+                .OrderByDescending(x => x.DueDate)
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
@@ -42,7 +42,7 @@ namespace Lendee.Core.DataAccess
 
         public async Task<IEnumerable<Repayment>> List(long contractId)
         {
-            return await context.Set<Repayment>().Where(x => x.ContractId == contractId).OrderByDescending(x => x.PaidAt).ToListAsync();
+            return await context.Set<Repayment>().Where(x => x.ContractId == contractId).OrderByDescending(x => x.DueDate).ToListAsync();
         }
 
         public Task Save()

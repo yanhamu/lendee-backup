@@ -69,10 +69,25 @@ namespace Lendee.Core.DataAccess
             var repayment = modelBuilder.Entity<Repayment>();
             repayment.ToTable("repayments");
             repayment.HasKey(x => x.Id);
-            repayment.Property(x => x.Amount).HasColumnName("amount");
-            repayment.Property(x => x.PaidAt).HasColumnName("paid_at");
+            repayment.Property(x => x.DueDate).HasColumnName("due_date");
             repayment.Property(x => x.ContractId).HasColumnName("contract_id");
             repayment.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);
+
+            repayment.HasDiscriminator<ContractType>("contract_type")
+                .HasValue<RentRepayment>(ContractType.Rent)
+                .HasValue<CombinedRentRepayment>(ContractType.CombinedRent)
+                .HasValue<VariableRentRepayment>(ContractType.VariableRent);
+
+            var rentRepayment = modelBuilder.Entity<RentRepayment>()
+                .Property(x => x.Amount).HasColumnName("amount");
+
+            var combinedRentRepayment = modelBuilder.Entity<CombinedRentRepayment>();
+            combinedRentRepayment.Property(x => x.Amount).HasColumnName("amount");
+            combinedRentRepayment.Property(x => x.Fee).HasColumnName("fee");
+
+            var variableRentRepayment = modelBuilder.Entity<VariableRentRepayment>();
+            variableRentRepayment.Property(x => x.UnitPrice).HasColumnName("amount");
+            variableRentRepayment.Property(x => x.Amount).HasColumnName("fee");
 
             var payment = modelBuilder.Entity<Payment>();
             payment.ToTable("payments");
@@ -88,7 +103,6 @@ namespace Lendee.Core.DataAccess
             contractDraft.Property(x => x.ContractId).HasColumnName("contract_id");
             contractDraft.Property(x => x.Step).HasColumnName("step");
             contractDraft.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);
-
         }
     }
 }

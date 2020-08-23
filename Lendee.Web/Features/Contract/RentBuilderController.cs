@@ -1,7 +1,10 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
+using Lendee.Core.Domain.Repayments.Rents;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lendee.Web.Features.Contract
@@ -10,12 +13,16 @@ namespace Lendee.Web.Features.Contract
     {
         private readonly IContractRepository contractRepository;
         private readonly IContractDraftRepository draftRepository;
+        private readonly IRepaymentRepository repaymentRepository;
+
         public RentBuilderController(
             IContractRepository contractRepository,
-            IContractDraftRepository draftRepository)
+            IContractDraftRepository draftRepository,
+            IRepaymentRepository repaymentRepository)
         {
             this.contractRepository = contractRepository;
             this.draftRepository = draftRepository;
+            this.repaymentRepository = repaymentRepository;
         }
 
         [HttpGet]
@@ -98,6 +105,72 @@ namespace Lendee.Web.Features.Contract
             return await IncreaseDraftStepAndRedirect(model.ContractId);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> CombinedRentRepayments(long contractId)
+        {
+            var rent = await contractRepository.FindCombinedRent(contractId);
+            var repayments = new CombinedRentRepaymentFactory().Generate(rent)
+                .Select(x => new RepaymentItemViewModel() { Date = x.DueDate, Value1 = x.Amount, Value2 = x.Fee })
+                .ToList();
+            return View(new RepaymentViewModel() { ContractId = contractId, Repayments = repayments });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CombinedRentRepayments(long contractId, RepaymentViewModel model)
+        {
+            var repayments = model.Repayments
+                .Select(x => new CombinedRentRepayment() { Amount = x.Value1, Fee = x.Value2, DueDate = x.Date, ContractId = contractId })
+                .OrderBy(x => x.DueDate);
+            foreach (var repayment in repayments)
+                repaymentRepository.Add(repayment);
+            await repaymentRepository.Save();
+            return await IncreaseDraftStepAndRedirect(model.ContractId);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> VariableRentRepayments(long contractId)
+        {
+            var rent = await contractRepository.FindVariableRent(contractId);
+            var repayments = new VariableRentRepaymentFactory().Generate(rent)
+                .Select(x => new RepaymentItemViewModel() { Date = x.DueDate, Value1 = x.Amount, Value2 = x.UnitPrice })
+                .ToList();
+            return View(new RepaymentViewModel() { ContractId = contractId, Repayments = repayments });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VariableRentRepayments(long contractId, RepaymentViewModel model)
+        {
+            var repayments = model.Repayments
+                .Select(x => new VariableRentRepayment() { Amount = x.Value1, UnitPrice = x.Value2, DueDate = x.Date, ContractId = contractId })
+                .OrderBy(x => x.DueDate);
+            foreach (var repayment in repayments)
+                repaymentRepository.Add(repayment);
+            await repaymentRepository.Save();
+            return await IncreaseDraftStepAndRedirect(model.ContractId);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RentRepayments(long contractId)
+        {
+            var rent = await contractRepository.FindRent(contractId);
+            var repayments = new RentRepaymentFactory().Generate(rent)
+                .Select(x => new RepaymentItemViewModel() { Date = x.DueDate, Value1 = x.Amount })
+                .ToList();
+            return View(new RepaymentViewModel() { ContractId = contractId, Repayments = repayments });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RentRepayments(long contractId, RepaymentViewModel model)
+        {
+            var repayments = model.Repayments
+                .Select(x => new RentRepayment() { Amount = x.Value1, DueDate = x.Date, ContractId = contractId })
+                .OrderBy(x => x.DueDate);
+            foreach (var repayment in repayments)
+                repaymentRepository.Add(repayment);
+            await repaymentRepository.Save();
+            return await IncreaseDraftStepAndRedirect(model.ContractId);
+        }
+
         private async Task<IActionResult> IncreaseDraftStepAndRedirect(long contractId)
         {
             var draft = await draftRepository.Find(contractId);
@@ -116,6 +189,19 @@ namespace Lendee.Web.Features.Contract
                 Day = model.Day,
                 Month = model.Month
             };
+        }
+
+        public class RepaymentViewModel
+        {
+            public long ContractId { get; set; }
+            public List<RepaymentItemViewModel> Repayments { get; set; }
+        }
+
+        public class RepaymentItemViewModel
+        {
+            public decimal Value1 { get; set; }
+            public decimal Value2 { get; set; }
+            public DateTime Date { get; set; }
         }
 
         public class RentViewModel

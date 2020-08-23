@@ -1,0 +1,28 @@
+﻿@model Lendee.Web.Features.Contract.RentBuilderController.RepaymentViewModel
+@{
+    ViewData["Title"] = "VariableRentRepayments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>VariableRentRepayments</h1>
+
+<form method="post" asp-route-contractId="@Model.ContractId">
+    <input type="hidden" asp-for="@Model.ContractId" />
+    <table class="table table-sm">
+        @for (int i = 0; i < Model.Repayments.Count; i++)
+        {
+            <tr>
+                <td>
+                    <input class="form-control" asp-for="@Model.Repayments[i].Date" readonly />
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.Repayments[i].Value1" />
+                </td>
+                <td>
+                    <input class="form-control" asp-for="@Model.Repayments[i].Value2" />
+                </td>
+            </tr>
+        }
+    </table>
+    <input class="btn btn-primary" type="submit" value="save" />
+</form>
