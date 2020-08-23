@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<div id="vueApp">
+    <form asp-controller="RepaymentCalculator" asp-action="Index" method="post">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Payments Count</label>
+            <input class="form-control" v-model="paymentCount" name="PaymentsCount" type="number" />
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Interest Rate</label>
+            <input class="form-control" v-model="interest" type="number" name="InterestRate" step="0.01" />
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Principal</label>
+            <input class="form-control" v-model="principal" name="Amount" type="number" />
+        </div>
+        <input class="btn btn-primary" v-on:click="calculate" value="Calculate" />
+
+        <div class="row">
+            <table class="table table-sm">
+                <tr>
+                    <th>#</th>
+                    <th>Total Debt</th>
+                    <th>Payment</th>
+                    <th>Debt</th>
+                    <th>Interest</th>
+                </tr>
+                <tr v-for="(payment, index) in payments" :key="`payment-${index}`">
+                    <td>{{ payment.index }}</td>
+                    <td>
+                        <input class="form-control" :name="'Payments['+index+'].TotalDebt'" v-model="payment.totalDebt" />
+                    </td>
+                    <td>
+                        <input class="form-control" :name="'Payments['+index+'].Payment'" v-model="payment.payment" />
+                    </td>
+                    <td>
+                        <input class="form-control" :name="'Payments['+index+'].Debt'" v-model="payment.debt" />
+                    </td>
+                    <td>
+                        <input class="form-control" :name="'Payments['+index+'].Interest'" v-model="payment.interest" type="number" />
+                    </td>
+                    <td>{{index}}</td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>{{sumPayment}}</th>
+                    <th>{{sumDebt}}</th>
+                    <th>{{sumInterest}}</th>
+                </tr>
+            </table>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Save" />
+    </form>
+</div>
+
+@section scripts  {
+
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#vueApp',
+            data: {
+                principal: 200000,
+                interest: 2.5,
+                paymentCount: 18,
+                payments: []
+            },
+            methods: {
+                calculate: function (event) {
+                    var interestRate = this.interest / 100;
+                    var p = Math.pow((1 + interestRate), this.paymentCount);
+                    var paymentAmount = Math.ceil(this.principal * (interestRate * p / (p - 1)));
+
+                    this.payments = [];
+                    var totalDebt = this.principal;
+                    for (var i = 0; i < this.paymentCount - 1; i++) {
+                        var interest = Math.round(totalDebt * interestRate);
+                        var debt = paymentAmount - interest;
+                        this.payments.push({
+                            'index': i,
+                            'debt': debt,
+                            'interest': interest,
+                            'totalDebt': totalDebt,
+                            'payment': debt + interest
+                        });
+                        totalDebt -= debt;
+                    };
+
+                    this.payments.push({
+                        'index': i,
+                        'totalDebt': totalDebt,
+                        'payment': totalDebt + Math.round(totalDebt * interestRate),
+                        'debt': totalDebt,
+                        'interest': Math.round(totalDebt * interestRate)
+                    });
+                }
+            },
+            computed: {
+                sumDebt: function () {
+                    var sum = 0;
+                    for (var i in this.payments) {
+                        sum += Number(this.payments[i].debt);
+                    }
+                    return sum;
+                },
+                sumInterest: function () {
+                    var sum = 0;
+                    for (var i in this.payments) {
+                        sum += Number(this.payments[i].interest);
+                    }
+                    return sum;
+                },
+                sumPayment: function () {
+                    var sum = 0;
+                    for (var i in this.payments) {
+                        sum += Number(this.payments[i].payment);
+                    }
+                    return sum;
+                }
+            }
+        })
+    </script>
+}

@@ -17,8 +17,8 @@ namespace Lendee.Web.Features.Contract
         public IActionResult Index(CreditViewModel model)
         {
             var interestRate = model.InterestRate / 100;
-            var xxx = Math.Pow((1 + (double)interestRate), model.PaymentsCount);
-            var payment = (double)model.Amount * ((double)interestRate * xxx / (xxx - 1));
+            var p = Math.Pow((1 + (double)interestRate), model.PaymentsCount);
+            var payment = (double)model.Amount * ((double)interestRate * p / (p - 1));
             var ceiledPayment = (decimal)Math.Ceiling(payment);
 
             var payments = GeneratePayments(ceiledPayment, interestRate, model.Amount, model.PaymentsCount).ToList();
