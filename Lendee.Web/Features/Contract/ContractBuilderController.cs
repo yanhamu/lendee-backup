@@ -57,23 +57,38 @@ namespace Lendee.Web.Features.Contract
             var draft = await draftRepository.Find(contractId);
             var contract = await contractRepository.Find(contractId);
 
-            if (draft.Step == 1 && contract.Type == ContractType.CombinedRent)
-                return RedirectToAction(nameof(RentBuilderController.CombinedRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-            if (draft.Step == 1 && contract.Type == ContractType.VariableRent)
-                return RedirectToAction(nameof(RentBuilderController.VariableRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-            if (draft.Step == 1 && contract.Type == ContractType.Rent)
-                return RedirectToAction(nameof(RentBuilderController.Rent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-
+            if (draft.Step == 1)
+                return ContractInitialization(contractId, contract);
             if (draft.Step == 2)
                 return RedirectToAction(nameof(SetLendee), new { contractId });
-
             if (draft.Step == 3)
                 return RedirectToAction(nameof(SetLender), new { contractId });
-
             if (draft.Step == 4)
                 return await Repayments(contractId);
 
             return RedirectToAction("List", "Contracts");
+        }
+
+        private IActionResult ContractInitialization(long contractId, Core.Domain.Model.Contract contract)
+        {
+            switch (contract.Type)
+            {
+                case ContractType.Undefined:
+                    throw new ArgumentException();
+                case ContractType.Rent:
+                    return RedirectToAction(nameof(RentBuilderController.Rent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
+                case ContractType.CombinedRent:
+                    return RedirectToAction(nameof(RentBuilderController.CombinedRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
+                case ContractType.VariableRent:
+                    return RedirectToAction(nameof(RentBuilderController.VariableRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
+                case ContractType.Loan:
+                    return RedirectToAction(nameof(LoanBuilderController.Loan), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId });
+                case ContractType.LoanWithInterest:
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
+            throw new NotImplementedException($"{contract.Type} is not implemented yet");
         }
 
         [HttpGet]
@@ -119,10 +134,8 @@ namespace Lendee.Web.Features.Contract
             {
                 case ContractType.Undefined:
                     throw new ArgumentException();
-                case ContractType.Credit:
-                    throw new NotImplementedException();
                 case ContractType.Loan:
-                    throw new NotImplementedException();
+                    return RedirectToAction(nameof(LoanBuilderController.LoanRepayments), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId });
                 case ContractType.CombinedRent:
                     return RedirectToAction(nameof(RentBuilderController.CombinedRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
                 case ContractType.VariableRent:
@@ -132,39 +145,6 @@ namespace Lendee.Web.Features.Contract
                 default:
                     throw new ArgumentException();
             }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Credit(long contractId)
-        {
-            var credit = await contractRepository.FindCredit(contractId);
-            return View(new CreditViewModel()
-            {
-                Id = credit.Id,
-                InterestRate = credit.InterestRate,
-                PaymentTermType = credit.PaymentTermType,
-                PrincipalSum = credit.PrincipalSum,
-                ValidFrom = credit.ValidFrom == default ? DateTime.Now : credit.ValidFrom,
-                ValidUntil = credit.ValidUntil ?? DateTime.Now.AddYears(1),
-                Day = credit.PaymentTermData?.Day,
-                Month = credit.PaymentTermData?.Month
-            });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Credit(CreditViewModel model)
-        {
-            var credit = await contractRepository.FindCredit(model.Id);
-            credit.InterestRate = model.InterestRate;
-            credit.PaymentTermType = model.PaymentTermType;
-            credit.PaymentTermData = new PaymentTerm() { Day = model.Day, Month = model.Month };
-            credit.PrincipalSum = model.PrincipalSum;
-            credit.ValidFrom = model.ValidFrom;
-            credit.ValidUntil = model.ValidUntil;
-
-            await contractRepository.Save();
-
-            return RedirectToAction("List", "Contracts");
         }
 
         private async Task<IActionResult> IncreaseDraftStepAndRedirect(long contractId)

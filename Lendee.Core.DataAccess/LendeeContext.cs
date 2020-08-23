@@ -43,7 +43,7 @@ namespace Lendee.Core.DataAccess
                 .HasValue<CombinedRent>(ContractType.CombinedRent)
                 .HasValue<VariableRent>(ContractType.VariableRent)
                 .HasValue<Rent>(ContractType.Rent)
-                .HasValue<Credit>(ContractType.Credit);
+                .HasValue<Loan>(ContractType.Loan);
             contract.OwnsOne(
                 x => x.PaymentTermData,
                 p =>
@@ -62,9 +62,8 @@ namespace Lendee.Core.DataAccess
             var rent = modelBuilder.Entity<Rent>();
             rent.Property(x => x.Amount).HasColumnName("payment_amount").IsRequired();
 
-            var credit = modelBuilder.Entity<Credit>();
-            credit.Property(x => x.InterestRate).HasColumnName("interest_rate");
-            credit.Property(x => x.PrincipalSum).HasColumnName("principal_sum");
+            var loan = modelBuilder.Entity<Loan>();
+            loan.Property(x => x.Amount).HasColumnName("payment_amount");
 
             var repayment = modelBuilder.Entity<Repayment>();
             repayment.ToTable("repayments");
@@ -76,7 +75,8 @@ namespace Lendee.Core.DataAccess
             repayment.HasDiscriminator<ContractType>("contract_type")
                 .HasValue<RentRepayment>(ContractType.Rent)
                 .HasValue<CombinedRentRepayment>(ContractType.CombinedRent)
-                .HasValue<VariableRentRepayment>(ContractType.VariableRent);
+                .HasValue<VariableRentRepayment>(ContractType.VariableRent)
+                .HasValue<LoanRepayment>(ContractType.Loan);
 
             var rentRepayment = modelBuilder.Entity<RentRepayment>()
                 .Property(x => x.Amount).HasColumnName("amount");
@@ -88,6 +88,9 @@ namespace Lendee.Core.DataAccess
             var variableRentRepayment = modelBuilder.Entity<VariableRentRepayment>();
             variableRentRepayment.Property(x => x.UnitPrice).HasColumnName("amount");
             variableRentRepayment.Property(x => x.Amount).HasColumnName("fee");
+
+            var loanRepayment = modelBuilder.Entity<LoanRepayment>();
+            loanRepayment.Property(x => x.Amount).HasColumnName("amount");
 
             var payment = modelBuilder.Entity<Payment>();
             payment.ToTable("payments");

@@ -11,7 +11,6 @@
         switch (contractType)
         {
             case Lendee.Core.Domain.Model.ContractType.Undefined: throw new ArgumentException("invalid contract type");
-            case Lendee.Core.Domain.Model.ContractType.Credit: throw new ArgumentException("invalid contract type");
             case Lendee.Core.Domain.Model.ContractType.Loan: throw new ArgumentException("invalid contract type");
             case Lendee.Core.Domain.Model.ContractType.CombinedRent:
                 return "CombinedRent";

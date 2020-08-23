@@ -37,7 +37,6 @@ namespace Lendee.Web.Features.Contract
                 ValidUntil = rent.ValidUntil,
                 ValidFrom = DateTime.Now,
                 Day = rent.PaymentTermData?.Day,
-                Month = rent.PaymentTermData?.Month
             });
         }
 
@@ -63,7 +62,6 @@ namespace Lendee.Web.Features.Contract
                 ValidUntil = rent.ValidUntil,
                 ValidFrom = DateTime.Now,
                 Day = rent.PaymentTermData?.Day,
-                Month = rent.PaymentTermData?.Month
             });
         }
 
@@ -89,8 +87,7 @@ namespace Lendee.Web.Features.Contract
                 Fee = rent.Fee,
                 ValidUntil = rent.ValidUntil,
                 ValidFrom = DateTime.Now,
-                Day = rent.PaymentTermData?.Day,
-                Month = rent.PaymentTermData?.Month
+                Day = rent.PaymentTermData?.Day
             });
         }
 
@@ -187,7 +184,6 @@ namespace Lendee.Web.Features.Contract
             contract.PaymentTermData = new PaymentTerm()
             {
                 Day = model.Day,
-                Month = model.Month
             };
         }
 
@@ -214,7 +210,6 @@ namespace Lendee.Web.Features.Contract
             public DateTime? ValidUntil { get; set; }
             public PaymentTermType PaymentTermType { get; set; }
             public int? Day { get; set; }
-            public int? Month { get; set; }
 
             public RentViewModel() { }
 

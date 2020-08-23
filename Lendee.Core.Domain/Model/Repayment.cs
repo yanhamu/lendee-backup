@@ -29,4 +29,9 @@ namespace Lendee.Core.Domain.Model
         public decimal Amount { get; set; }
         public decimal UnitPrice { get; set; }
     }
+
+    public class LoanRepayment : Repayment
+    {
+        public decimal Amount { get; set; }
+    }
 }

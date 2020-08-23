@@ -26,13 +26,6 @@ namespace Lendee.Core.Domain.Model
         public int? Month { get; set; }
     }
 
-    public class Credit : Contract
-    {
-
-        public decimal InterestRate { get; set; }
-        public decimal PrincipalSum { get; set; }
-    }
-
     public enum PaymentTermType
     {
         NotSet = 0,
@@ -46,11 +39,12 @@ namespace Lendee.Core.Domain.Model
     public enum ContractType : int
     {
         Undefined = 0,
-        Credit = 1, // uver
-        Loan = 2, // pujcka
-        CombinedRent = 3, // najem + zalohy
-        VariableRent = 4, // najem za jednotkovou cenu
-        Rent = 5 // jenom najem (bez energii)
+        Rent = 10, // jenom najem (bez energii)
+        CombinedRent = 11, // najem + zalohy
+        VariableRent = 12, // najem za jednotkovou cenu
+        Loan = 20, // pujcka
+        LoanWithInterest = 21, // pujcka s urokem
+        //Credit = 30 // uver
     }
 
     public enum Currency
