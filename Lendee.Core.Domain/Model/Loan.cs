@@ -4,4 +4,10 @@
     {
         public decimal Amount { get; set; }
     }
+
+    public class LoanWithInterest : Contract
+    {
+        public decimal Amount { get; set; }
+        public decimal InterestRate { get; set; }
+    }
 }
