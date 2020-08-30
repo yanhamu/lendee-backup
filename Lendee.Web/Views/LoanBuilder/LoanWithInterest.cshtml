@@ -7,7 +7,7 @@
 <h1>LoanWithInterest</h1>
 
 <div id="vueApp">
-    <form asp-action="LoanWithInterest" method="post">
+    <form asp-action="LoanWithInterest" asp-route-contractId="@Model.ContractId" method="post">
         <input asp-for="ContractId" type="hidden" />
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Payments Count</label>

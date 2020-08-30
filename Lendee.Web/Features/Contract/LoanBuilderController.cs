@@ -101,21 +101,21 @@ namespace Lendee.Web.Features.Contract
             loan.PaymentTermType = PaymentTermType.Monthly;
             loan.PaymentTermData = new PaymentTerm() { Day = model.DueDay };
 
-            model.Repayments.ForEach(r => repaymentRepository.Add(new LoanWithInterestRepayment() { Amount = r.Amount, DueDate = r.Due, ContractId = model.ContractId, Interest = r.Interest }));
+            model.Repayments
+                .OrderBy(x => x.Due)
+                .ToList()
+                .ForEach(r => repaymentRepository.Add(new LoanWithInterestRepayment()
+                {
+                    Amount = r.Amount,
+                    DueDate = r.Due,
+                    ContractId = model.ContractId,
+                    Interest = r.Interest
+                }));
 
             await contractRepository.Save();
 
-            return View(new LoanWithInterestViewModel()
-            {
-                ContractId = contractId,
-                Principal = loan.Amount,
-                ValidFrom = loan.ValidFrom == default ? DateTime.Now : loan.ValidFrom,
-                ValidUntil = loan.ValidUntil,
-                PaymentTermType = loan.PaymentTermType,
-                Day = loan.PaymentTermData?.Day,
-            });
+            return await IncreaseDraftStepAndRedirect(model.ContractId);
         }
-
 
         private async Task<IActionResult> IncreaseDraftStepAndRedirect(long contractId)
         {

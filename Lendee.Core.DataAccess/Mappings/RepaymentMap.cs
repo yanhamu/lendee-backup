@@ -19,7 +19,7 @@ namespace Lendee.Core.DataAccess.Mappings
                 .HasValue<CombinedRentRepayment>(ContractType.CombinedRent)
                 .HasValue<VariableRentRepayment>(ContractType.VariableRent)
                 .HasValue<LoanRepayment>(ContractType.Loan)
-                .HasValue<LoanRepayment>(ContractType.LoanWithInterest);
+                .HasValue<LoanWithInterestRepayment>(ContractType.LoanWithInterest);
 
         }
     }
