@@ -75,6 +75,48 @@ namespace Lendee.Web.Features.Contract
             return await IncreaseDraftStepAndRedirect(contractId);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> LoanWithInterest(long contractId)
+        {
+            var loan = await contractRepository.FindLoanWithInterest(contractId);
+            return View(new LoanWithInterestViewModel()
+            {
+                ContractId = contractId,
+                Principal = loan.Amount,
+                ValidFrom = loan.ValidFrom == default ? DateTime.Now : loan.ValidFrom,
+                ValidUntil = loan.ValidUntil,
+                PaymentTermType = loan.PaymentTermType,
+                Day = loan.PaymentTermData?.Day,
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoanWithInterest(long contractId, LoanWithInterestViewModel model)
+        {
+            var loan = await contractRepository.FindLoanWithInterest(contractId);
+            loan.Amount = model.Principal;
+            loan.ValidFrom = model.ValidFrom;
+            loan.ValidUntil = model.ValidUntil;
+            loan.InterestRate = model.InterestRate;
+            loan.PaymentTermType = PaymentTermType.Monthly;
+            loan.PaymentTermData = new PaymentTerm() { Day = model.DueDay };
+
+            model.Repayments.ForEach(r => repaymentRepository.Add(new LoanWithInterestRepayment() { Amount = r.Amount, DueDate = r.Due, ContractId = model.ContractId, Interest = r.Interest }));
+
+            await contractRepository.Save();
+
+            return View(new LoanWithInterestViewModel()
+            {
+                ContractId = contractId,
+                Principal = loan.Amount,
+                ValidFrom = loan.ValidFrom == default ? DateTime.Now : loan.ValidFrom,
+                ValidUntil = loan.ValidUntil,
+                PaymentTermType = loan.PaymentTermType,
+                Day = loan.PaymentTermData?.Day,
+            });
+        }
+
+
         private async Task<IActionResult> IncreaseDraftStepAndRedirect(long contractId)
         {
             var draft = await draftRepository.Find(contractId);
@@ -93,6 +135,19 @@ namespace Lendee.Web.Features.Contract
             public int? Day { get; set; }
         }
 
+        public class LoanWithInterestViewModel
+        {
+            public long ContractId { get; set; }
+            public decimal Principal { get; set; }
+            public decimal InterestRate { get; set; }
+            public int DueDay { get; set; }
+            public DateTime ValidFrom { get; set; }
+            public DateTime? ValidUntil { get; set; }
+            public PaymentTermType PaymentTermType { get; set; }
+            public List<FullRepaymentItemViewModel> Repayments { get; set; }
+            public int? Day { get; set; }
+        }
+
         public class RepaymentViewModel
         {
             public long ContractId { get; set; }
@@ -103,6 +158,16 @@ namespace Lendee.Web.Features.Contract
         {
             public DateTime Due { get; set; }
             public decimal Amount { get; set; }
+
+        }
+
+        public class FullRepaymentItemViewModel
+        {
+            public decimal TotalDebt { get; set; }
+            public decimal Amount { get; set; }
+            public decimal Debt { get; set; }
+            public decimal Interest { get; set; }
+            public DateTime Due { get; set; }
         }
     }
 }

@@ -55,5 +55,10 @@ namespace Lendee.Core.DataAccess
         {
             return context.SaveChangesAsync();
         }
+
+        public ValueTask<LoanWithInterest> FindLoanWithInterest(long contractId)
+        {
+            return context.Set<LoanWithInterest>().FindAsync(contractId);
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Lendee.Core.DataAccess.Mappings;
-using Lendee.Core.Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lendee.Core.DataAccess

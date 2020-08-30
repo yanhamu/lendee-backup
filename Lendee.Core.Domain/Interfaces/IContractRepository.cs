@@ -14,5 +14,6 @@ namespace Lendee.Core.Domain.Interfaces
         ValueTask<VariableRent> FindVariableRent(long contractId);
         ValueTask<CombinedRent> FindCombinedRent(long contractId);
         ValueTask<Loan> FindLoan(long contractId);
+        ValueTask<LoanWithInterest> FindLoanWithInterest(long contractId);
     }
 }

@@ -84,7 +84,7 @@ namespace Lendee.Web.Features.Contract
                 case ContractType.Loan:
                     return RedirectToAction(nameof(LoanBuilderController.Loan), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId });
                 case ContractType.LoanWithInterest:
-                    break;
+                    return RedirectToAction(nameof(LoanBuilderController.LoanWithInterest), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId });
                 default:
                     throw new ArgumentException();
             }
