@@ -1,0 +1,14 @@
+2020-08-30 19:49:51.7708 Info Message Template Auto Format enabled
+2020-08-30 19:49:51.7885 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-30 19:49:51.8543 Info Adding target DatabaseTarget(Name=database)
+2020-08-30 19:49:51.8711 Info Adding target FileTarget(Name=file)
+2020-08-30 19:49:51.9178 Info Validating config: TargetNames=file, database, ConfigItems=42, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-08-30 19:49:51.9884 Info Configuration initialized.
+2020-08-30 19:49:51.9884 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-08-30 19:50:34.9173 Info Message Template Auto Format enabled
+2020-08-30 19:50:34.9371 Info Loading assembly: NLog.Web.AspNetCore
+2020-08-30 19:50:35.0177 Info Adding target DatabaseTarget(Name=database)
+2020-08-30 19:50:35.0423 Info Adding target FileTarget(Name=file)
+2020-08-30 19:50:35.0726 Info Validating config: TargetNames=file, database, ConfigItems=42, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-08-30 19:50:35.1457 Info Configuration initialized.
+2020-08-30 19:50:35.1524 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False

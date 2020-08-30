@@ -74,23 +74,16 @@ namespace Lendee.Web.Features.Contract
 
         private IActionResult ContractInitialization(long contractId, Core.Domain.Model.Contract contract)
         {
-            switch (contract.Type)
+            return contract.Type switch
             {
-                case ContractType.Undefined:
-                    throw new ArgumentException();
-                case ContractType.Rent:
-                    return RedirectToAction(nameof(RentBuilderController.Rent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.CombinedRent:
-                    return RedirectToAction(nameof(RentBuilderController.CombinedRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.VariableRent:
-                    return RedirectToAction(nameof(RentBuilderController.VariableRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.Loan:
-                    return RedirectToAction(nameof(LoanBuilderController.Loan), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.LoanWithInterest:
-                    return RedirectToAction(nameof(LoanBuilderController.LoanWithInterest), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId });
-                default:
-                    throw new ArgumentException();
-            }
+                ContractType.Undefined => throw new ArgumentException(),
+                ContractType.Rent => RedirectToAction(nameof(RentBuilderController.Rent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId }),
+                ContractType.CombinedRent => RedirectToAction(nameof(RentBuilderController.CombinedRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId }),
+                ContractType.VariableRent => RedirectToAction(nameof(RentBuilderController.VariableRent), nameof(RentBuilderController).Replace("Controller", ""), new { contractId }),
+                ContractType.Loan => RedirectToAction(nameof(LoanBuilderController.Loan), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId }),
+                ContractType.LoanWithInterest => RedirectToAction(nameof(LoanBuilderController.LoanWithInterest), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId }),
+                _ => throw new ArgumentException(),
+            };
             throw new NotImplementedException($"{contract.Type} is not implemented yet");
         }
 
@@ -133,23 +126,15 @@ namespace Lendee.Web.Features.Contract
         public async Task<IActionResult> Repayments(long contractId)
         {
             var contract = await contractRepository.Find(contractId);
-            switch (contract.Type)
+            return contract.Type switch
             {
-                case ContractType.Undefined:
-                    throw new ArgumentException();
-                case ContractType.Loan:
-                    return RedirectToAction(nameof(LoanBuilderController.LoanRepayments), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.CombinedRent:
-                    return RedirectToAction(nameof(RentBuilderController.CombinedRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.VariableRent:
-                    return RedirectToAction(nameof(RentBuilderController.VariableRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.Rent:
-                    return RedirectToAction(nameof(RentBuilderController.RentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
-                case ContractType.LoanWithInterest:
-
-                default:
-                    throw new ArgumentException();
-            }
+                ContractType.Undefined => throw new ArgumentException(),
+                ContractType.Loan => RedirectToAction(nameof(LoanBuilderController.LoanRepayments), nameof(LoanBuilderController).Replace("Controller", ""), new { contractId }),
+                ContractType.CombinedRent => RedirectToAction(nameof(RentBuilderController.CombinedRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId }),
+                ContractType.VariableRent => RedirectToAction(nameof(RentBuilderController.VariableRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId }),
+                ContractType.Rent => RedirectToAction(nameof(RentBuilderController.RentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId }),
+                _ => throw new ArgumentException(),
+            };
         }
 
         private async Task<IActionResult> IncreaseDraftStepAndRedirect(long contractId)
@@ -157,7 +142,7 @@ namespace Lendee.Web.Features.Contract
             var draft = await draftRepository.Find(contractId);
             draft.Step += 1;
             await draftRepository.Save();
-            return RedirectToAction(nameof(ContractBuilderController.Step), new { contractId = contractId });
+            return RedirectToAction(nameof(ContractBuilderController.Step), new { contractId });
         }
 
         public class PaymentsViewModel

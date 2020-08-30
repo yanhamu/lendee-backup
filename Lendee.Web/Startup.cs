@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog;
 
 namespace Lendee.Web
 {
@@ -40,6 +41,7 @@ namespace Lendee.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = configuration;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
