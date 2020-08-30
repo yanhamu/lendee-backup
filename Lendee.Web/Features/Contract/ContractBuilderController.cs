@@ -4,6 +4,7 @@ using Lendee.Web.Features.Common;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace Lendee.Web.Features.Contract
@@ -36,12 +37,14 @@ namespace Lendee.Web.Features.Contract
         [HttpPost]
         public async Task<IActionResult> Create(DraftContract contract)
         {
+            if (ModelState.IsValid == false)
+                return View(contract);
             var toSave = new Core.Domain.Model.Contract()
             {
-                Currency = contract.Currency,
+                Currency = contract.Currency.Value,
                 Name = contract.Name,
                 Note = contract.Note,
-                Type = contract.Type
+                Type = contract.Type.Value
             };
 
             var saved = contractRepository.Add(toSave);
@@ -63,7 +66,7 @@ namespace Lendee.Web.Features.Contract
                 return RedirectToAction(nameof(SetLendee), new { contractId });
             if (draft.Step == 3)
                 return RedirectToAction(nameof(SetLender), new { contractId });
-            if (draft.Step == 4)
+            if (draft.Step == 4 && contract.Type != ContractType.LoanWithInterest)
                 return await Repayments(contractId);
 
             return RedirectToAction("List", "Contracts");
@@ -142,6 +145,8 @@ namespace Lendee.Web.Features.Contract
                     return RedirectToAction(nameof(RentBuilderController.VariableRentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
                 case ContractType.Rent:
                     return RedirectToAction(nameof(RentBuilderController.RentRepayments), nameof(RentBuilderController).Replace("Controller", ""), new { contractId });
+                case ContractType.LoanWithInterest:
+
                 default:
                     throw new ArgumentException();
             }
@@ -172,9 +177,12 @@ namespace Lendee.Web.Features.Contract
     public class DraftContract
     {
         public long Id { get; set; }
+        [Required]
         public string Name { get; set; }
-        public ContractType Type { get; set; }
-        public Currency Currency { get; set; }
+        [Required]
+        public ContractType? Type { get; set; }
+        [Required]
+        public Currency? Currency { get; set; }
         public long? LenderId { get; set; }
         public long? LendeeId { get; set; }
         public string Note { get; set; }

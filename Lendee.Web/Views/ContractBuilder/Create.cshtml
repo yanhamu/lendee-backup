@@ -12,33 +12,44 @@
         <label asp-for="Name" class="col-sm-2 col-form-label">Name</label>
         <div class="col-sm-10">
             <input class="form-control" asp-for="Name" type="text" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Contract type</label>
-        <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
-
-            @foreach (var e in Enum.GetNames(typeof(Lendee.Core.Domain.Model.ContractType)).Where(x => x != Lendee.Core.Domain.Model.ContractType.Undefined.ToString()))
-            {
-                <label class="btn btn-secondary">
-                    <input type="radio" autocomplete="off" asp-for="Type" value="@e"> @Localizer[e.ToString()]
-                </label>
-            }
+        <div class="col">
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Contract type</label>
+                <div class="btn-group btn-group-toggle col-sm-4" role="group" data-toggle="buttons">
+                    @foreach (var e in Enum.GetNames(typeof(Lendee.Core.Domain.Model.ContractType)).Where(x => x != Lendee.Core.Domain.Model.ContractType.Undefined.ToString()))
+                    {
+                        <label class="btn btn-secondary @(Enum.Parse<Lendee.Core.Domain.Model.ContractType>(e) == @Model.Type ? "active": "")">
+                            <input type="radio" autocomplete="off" asp-for="Type" value="@e"> @Localizer[e.ToString()]
+                        </label>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <span asp-validation-for="Type" class="offset-2 col-sm-10 text-danger"></span>
+            </div>
         </div>
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-2 col-form-label">@Localizer["Currency"]</label>
-        <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons">
-            <label class="btn btn-secondary">
-                <input type="radio" autocomplete="off" asp-for="Currency" value="@Lendee.Core.Domain.Model.Currency.CZK"> CZK
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" autocomplete="off" asp-for="Currency" value="@Lendee.Core.Domain.Model.Currency.EUR"> EUR
-            </label>
-            <label class="btn btn-secondary">
-                <input type="radio" autocomplete="off" asp-for="Currency" value="@Lendee.Core.Domain.Model.Currency.USD"> USD
-            </label>
+        <div class="col">
+            <div class="row">
+                <label class="col-sm-2 col-form-label">@Localizer["Currency"]</label>
+                <div class="btn-group btn-group-toggle col-sm-4" data-toggle="buttons" role="group">
+                    @foreach (var e in Enum.GetNames(typeof(Lendee.Core.Domain.Model.Currency)))
+                    {
+                        <label class="btn btn-secondary @(Enum.Parse<Lendee.Core.Domain.Model.Currency>(e) == @Model.Currency ? "active": "")">
+                            <input type="radio" autocomplete="off" asp-for="Currency" value="@e"> @e.ToString()
+                        </label>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <span asp-validation-for="Currency" class="offset-2 col-sm-10 text-danger"></span>
+            </div>
         </div>
     </div>
 
