@@ -10,7 +10,7 @@ namespace Lendee.Core.DataAccess.Mappings
         {
             builder.ToTable("payments");
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Amount).HasColumnName("amount");
+            builder.Property(x => x.Amount).HasColumnName("amount").HasColumnType("decimal(11,3)");
             builder.Property(x => x.ReceivedAt).HasColumnName("received_at");
             builder.Property(x => x.ContractId).HasColumnName("contract_id");
             builder.HasOne(x => x.Contract).WithMany().HasForeignKey(x => x.ContractId);

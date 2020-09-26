@@ -11,7 +11,7 @@ namespace Lendee.Web.Configurations
         {
             builder.RegisterAssemblyTypes(typeof(ContractRepository).Assembly).Where(x => x.Name.EndsWith("Repository")).AsImplementedInterfaces();
             builder.RegisterGeneric(typeof(GenericRepository<>)).As(typeof(IRepository<>));
-            builder.RegisterType<PaymentService>();
+            builder.RegisterAssemblyTypes(typeof(PaymentService).Assembly).Where(x => x.Name.EndsWith("Service"));
         }
     }
 }

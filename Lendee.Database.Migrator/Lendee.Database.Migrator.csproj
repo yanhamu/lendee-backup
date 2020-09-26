@@ -27,6 +27,7 @@
     <None Remove="Scripts\0019_alter_repayments.sql" />
     <None Remove="Scripts\0020_create_log.sql" />
     <None Remove="Scripts\0021_alter_payments.sql" />
+    <None Remove="Scripts\0021_create_payment_dues.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +50,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Scripts\0004_create_schema.sql" />
+    <EmbeddedResource Include="Scripts\0021_create_payment_dues.sql" />
     <EmbeddedResource Include="Scripts\0021_alter_payments.sql" />
     <EmbeddedResource Include="Scripts\0020_create_log.sql" />
     <EmbeddedResource Include="Scripts\0019_alter_repayments.sql" />
