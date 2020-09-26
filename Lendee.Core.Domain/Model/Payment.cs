@@ -6,7 +6,7 @@ namespace Lendee.Core.Domain.Model
     {
         public long Id { get; set; }
         public decimal Amount { get; set; }
-        public DateTime DueDate { get; set; }
+        public DateTime ReceivedAt { get; set; }
         public long ContractId { get; set; }
         public Contract Contract { get; set; }
     }

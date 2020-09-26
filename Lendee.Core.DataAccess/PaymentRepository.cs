@@ -1,29 +1,19 @@
 ﻿using Lendee.Core.Domain.Interfaces;
 using Lendee.Core.Domain.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Lendee.Core.DataAccess
 {
-    public class PaymentRepository : IPaymentRepository
+    public class PaymentRepository : GenericRepository<Payment>, IPaymentRepository
     {
-        private readonly LendeeContext context;
+        public PaymentRepository(LendeeContext context) : base(context) { }
 
-        public PaymentRepository(LendeeContext context)
+        public Task<List<Payment>> List(long contractId)
         {
-            this.context = context;
-        }
-        public Task Save()
-        {
-            return context.SaveChangesAsync();
-        }
-
-        public void SaveNewPayments(IEnumerable<Payment> payments, long contractId)
-        {
-            foreach (var payment in payments)
-            {
-                context.Set<Payment>().Add(payment);
-            }
+            return set.Where(p => p.ContractId == contractId).OrderByDescending(x=>x.ReceivedAt).ToListAsync();
         }
     }
 }

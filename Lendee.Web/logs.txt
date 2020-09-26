@@ -1,14 +1,49 @@
-2020-08-30 19:49:51.7708 Info Message Template Auto Format enabled
-2020-08-30 19:49:51.7885 Info Loading assembly: NLog.Web.AspNetCore
-2020-08-30 19:49:51.8543 Info Adding target DatabaseTarget(Name=database)
-2020-08-30 19:49:51.8711 Info Adding target FileTarget(Name=file)
-2020-08-30 19:49:51.9178 Info Validating config: TargetNames=file, database, ConfigItems=42, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
-2020-08-30 19:49:51.9884 Info Configuration initialized.
-2020-08-30 19:49:51.9884 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
-2020-08-30 19:50:34.9173 Info Message Template Auto Format enabled
-2020-08-30 19:50:34.9371 Info Loading assembly: NLog.Web.AspNetCore
-2020-08-30 19:50:35.0177 Info Adding target DatabaseTarget(Name=database)
-2020-08-30 19:50:35.0423 Info Adding target FileTarget(Name=file)
-2020-08-30 19:50:35.0726 Info Validating config: TargetNames=file, database, ConfigItems=42, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
-2020-08-30 19:50:35.1457 Info Configuration initialized.
-2020-08-30 19:50:35.1524 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-09-26 19:18:29.0968 Info Message Template Auto Format enabled
+2020-09-26 19:18:29.1168 Info Loading assembly: NLog.Web.AspNetCore
+2020-09-26 19:18:29.1842 Info Adding target DatabaseTarget(Name=database)
+2020-09-26 19:18:29.1993 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'file' not found for logging rule: *.
+2020-09-26 19:18:29.2278 Info Validating config: TargetNames=database, ConfigItems=32, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-09-26 19:18:29.3079 Info Configuration initialized.
+2020-09-26 19:18:29.3079 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-09-26 19:19:59.7121 Info Message Template Auto Format enabled
+2020-09-26 19:19:59.7316 Info Loading assembly: NLog.Web.AspNetCore
+2020-09-26 19:19:59.7858 Info Adding target DatabaseTarget(Name=database)
+2020-09-26 19:19:59.8002 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'file' not found for logging rule: *.
+2020-09-26 19:19:59.8271 Info Validating config: TargetNames=database, ConfigItems=32, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-09-26 19:19:59.8931 Info Configuration initialized.
+2020-09-26 19:19:59.8990 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-09-26 19:22:00.7107 Info Message Template Auto Format enabled
+2020-09-26 19:22:00.7259 Info Loading assembly: NLog.Web.AspNetCore
+2020-09-26 19:22:00.7774 Info Adding target DatabaseTarget(Name=database)
+2020-09-26 19:22:00.7952 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'file' not found for logging rule: *.
+2020-09-26 19:22:00.8204 Info Validating config: TargetNames=database, ConfigItems=32, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-09-26 19:22:00.8869 Info Configuration initialized.
+2020-09-26 19:22:00.8869 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-09-26 19:24:42.4684 Info Message Template Auto Format enabled
+2020-09-26 19:24:42.4845 Info Loading assembly: NLog.Web.AspNetCore
+2020-09-26 19:24:42.5380 Info Adding target DatabaseTarget(Name=database)
+2020-09-26 19:24:42.5530 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'file' not found for logging rule: *.
+2020-09-26 19:24:42.5820 Info Validating config: TargetNames=database, ConfigItems=32, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-09-26 19:24:42.6475 Info Configuration initialized.
+2020-09-26 19:24:42.6475 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-09-26 19:33:57.9228 Info Message Template Auto Format enabled
+2020-09-26 19:33:57.9419 Info Loading assembly: NLog.Web.AspNetCore
+2020-09-26 19:33:57.9997 Info Adding target DatabaseTarget(Name=database)
+2020-09-26 19:33:58.0150 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'file' not found for logging rule: *.
+2020-09-26 19:33:58.0536 Info Validating config: TargetNames=database, ConfigItems=32, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-09-26 19:33:58.1767 Info Configuration initialized.
+2020-09-26 19:33:58.1830 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-09-26 19:36:21.2948 Info Message Template Auto Format enabled
+2020-09-26 19:36:21.3111 Info Loading assembly: NLog.Web.AspNetCore
+2020-09-26 19:36:21.3668 Info Adding target DatabaseTarget(Name=database)
+2020-09-26 19:36:21.3826 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'file' not found for logging rule: *.
+2020-09-26 19:36:21.4120 Info Validating config: TargetNames=database, ConfigItems=32, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-09-26 19:36:21.4785 Info Configuration initialized.
+2020-09-26 19:36:21.4785 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False
+2020-09-26 19:47:33.1198 Info Message Template Auto Format enabled
+2020-09-26 19:47:33.1367 Info Loading assembly: NLog.Web.AspNetCore
+2020-09-26 19:47:33.1948 Info Adding target DatabaseTarget(Name=database)
+2020-09-26 19:47:33.2089 Warn Error has been raised. Exception: NLog.NLogConfigurationException: Target 'file' not found for logging rule: *.
+2020-09-26 19:47:33.2368 Info Validating config: TargetNames=database, ConfigItems=32, FilePath=C:\src\Lendee\Lendee.Web\bin\Debug\netcoreapp3.1\NLog.config
+2020-09-26 19:47:33.3050 Info Configuration initialized.
+2020-09-26 19:47:33.3050 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.2.11786. Product version: 4.7.2+024896f64b840a743d3fd89e29c2186681e7795f. GlobalAssemblyCache: False

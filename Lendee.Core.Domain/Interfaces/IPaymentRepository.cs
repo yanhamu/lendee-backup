@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 
 namespace Lendee.Core.Domain.Interfaces
 {
-    public interface IPaymentRepository
+    public interface IPaymentRepository : IRepository<Payment>
     {
-        void SaveNewPayments(IEnumerable<Payment> payments, long contractId);
-        Task Save();
+        Task<List<Payment>> List(long contractId);
     }
 }
